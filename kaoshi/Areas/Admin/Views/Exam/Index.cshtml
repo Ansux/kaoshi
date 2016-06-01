@@ -1,0 +1,67 @@
+﻿@model IEnumerable<kaoshi.Models.es_exam>
+
+@{
+   ViewBag.Title = "Index";
+}
+
+<h3>考试安排</h3>
+
+<p>
+   @Html.ActionLink("添加考试", "Create")
+</p>
+
+<table class="table">
+   <tr>
+      <th>名称</th>
+      <th>状态</th>
+      <th>考试时间</th>
+      <th>结束时间</th>
+      <th>操作</th>
+   </tr>
+   @foreach (var item in Model)
+   {
+      <tr>
+         <td>
+            @Html.DisplayFor(modelItem => item.name)
+         </td>
+         <td>
+            @if (item.begin_time > DateTime.Now)
+            {
+               @Html.Raw("待考中");
+            }
+            else if (item.end_time < DateTime.Now)
+            {
+               @Html.Raw("已结束");
+            }
+            else
+            {
+               @Html.Raw("正在进行考试");
+            }
+         </td>
+         <td>
+            @Html.DisplayFor(modelItem => item.begin_time)
+         </td>
+         <td>
+            @Html.DisplayFor(modelItem => item.end_time)
+         </td>
+         <td>
+            @if (item.begin_time > DateTime.Now)
+            {
+               @Html.ActionLink("编辑", "Edit", new { id = item.id })<span> |</span>
+               @Html.ActionLink("详情", "Details", new { id = item.id })<span> |</span>
+               @Html.ActionLink("删除", "Delete", new { id = item.id })
+            }
+            else if (item.end_time < DateTime.Now)
+            {
+               @Html.ActionLink("详情", "Details", new { id = item.id })
+            }
+            else
+            {
+               @Html.ActionLink("编辑", "Edit", new { id = item.id })<span> |</span>
+               @Html.ActionLink("详情", "Details", new { id = item.id })
+            }
+         </td>
+      </tr>
+            }
+
+</table>

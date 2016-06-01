@@ -1,0 +1,149 @@
+﻿@model IEnumerable<kaoshi.Models.es_exam>
+
+@{
+   ViewBag.Title = "Chart";
+}
+
+@section Styles{
+   <style>
+      .pie-box {
+         padding-top:5px;
+      }
+
+      .pie {
+         float: left;
+      }
+
+      .pie-box .info {
+         float: left;
+         margin-left: 20px;
+      }
+
+      .pie-box .info .glyphicon {
+         font-size: 26px;
+      }
+
+      .level-1 .glyphicon {
+         color: #F38630;
+      }
+
+      .level-2 .glyphicon {
+         color: #E0E4CC;
+      }
+
+      .level-3 .glyphicon {
+         color: #69D2E7;
+      }
+      .head{
+         height:40px;
+         line-height:40px;
+         font-size:14px;
+         font-weight:bold;
+         border-top:solid 1px #eee;
+         border-bottom:solid 1px #eee;
+         margin-top:10px;
+         margin-bottom:10px;
+      }
+   </style>
+}
+
+<h2>Chart</h2>
+
+<p>
+   @Html.ActionLink("Create New", "Create")
+</p>
+<div class="head">
+   <div class="col-md-4">考试名称</div>
+   <div class="col-md-3">开始时间</div>
+   <div class="col-md-3">结束时间</div>
+   <div class="col-md-2">操作</div>
+</div>
+<div ng-app="myApp" ng-controller="myController">
+   <div ng-repeat="e in exams">
+      <div class="info-item clearfix">
+         <div class="col-md-4" ng-bind="e.paper"></div>
+         <div class="col-md-3" ng-bind="e.begin_time|date:'yyyy-MM-dd'"></div>
+         <div class="col-md-3" ng-bind="e.end_time"></div>
+         <div class="col-md-2">
+            <a ng-click="getStuExamInfo(e)">图表</a>
+            <a href="/Admin/Exam/TestChart/{{e.id}}">试卷</a>
+         </div>
+      </div>
+      <div ng-show="e.showMore" class="pie-box clearfix">
+         <div class="row">
+            <div class="pie">
+               <canvas id="pie{{e.id}}" width='100' height='100' />
+            </div>
+            <div class="info">
+               <div ng-repeat="c in e.chart" class="level-{{$index+1}}">
+                  <span class="glyphicon glyphicon-minus"></span>
+                  <span>{{c.label}}({{c.value}}人/{{c.value/e.chart.length*100|number:'1'}}%)</span>
+               </div>
+            </div>
+         </div>
+         <div class="clearfix">
+            <div>平均分{{e.average}}(分)</div>
+            <div>及格率{{e.jige}}%</div>
+         </div>
+      </div>
+   </div>
+</div>
+@section Scripts {
+   <script src="~/Scripts/angular.min.js"></script>
+   <script src="~/Scripts/Chart.min.js"></script>
+   <script>
+      angular.module('myApp', [])
+      .controller('myController', function ($scope, $http) {
+         $http.get('GetExams').success(function (res) {
+            $scope.exams = res.exams;
+         });
+
+         $scope.getStuExamInfo = function (e) {
+            e.showMore = !e.showMore;
+            if (e.chart == null) {
+               var ctx = document.getElementById('pie' + e.id).getContext("2d");
+               var data = [
+                  {
+                     value: 0,
+                     color: "#F38630",
+                     label: "优秀"
+                  },
+                  {
+                     value: 0,
+                     color: "#E0E4CC",
+                     label: "不及格"
+                  },
+                  {
+                     value: 0,
+                     color: "#69D2E7",
+                     label: "中等"
+                  }
+               ]
+               var options = {
+                  // responsive: true
+               }
+               $http.get('GetStuExmaInfo?eid=' + e.id).success(function (res) {
+                  var totalScore = 0;
+                  angular.forEach(res.exams, function (v, k) {
+                     totalScore += v.score;
+                     if (v.score >= 80) {
+                        data[0].value += 1;
+                     } else if (v.score < 60) {
+                        data[1].value += 1;
+                     } else {
+                        data[2].value += 1;
+                     }
+                  });
+                  // 平均分
+                  e.average = totalScore / res.exams.length;
+                  e.jige = (data[0].value + data[2].value) / res.exams.length * 100;
+
+                  // 饼图数据
+                  e.chart = data;
+                  new Chart(ctx).Pie(data, options);
+               });
+            }
+         }
+      })
+   </script>
+}

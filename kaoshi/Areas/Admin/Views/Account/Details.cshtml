@@ -1,0 +1,66 @@
+﻿@model kaoshi.Models.es_manager
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>es_manager</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.es_role.name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.es_role.name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.login_id)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.login_id)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.login_pwd)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.login_pwd)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.real_name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.real_name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.sex)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.sex)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.email)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.email)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

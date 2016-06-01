@@ -1,0 +1,39 @@
+﻿@model kaoshi.Models.es_stu_exam
+
+@{
+   ViewBag.Title = "Result";
+}
+
+<h2>Result</h2>
+
+<div>
+   <hr />
+   <dl class="dl-horizontal">
+      <dt>考卷</dt>
+      <dd>
+         @Model.es_exam.es_paper.name
+      </dd>
+
+      <dt>考生</dt>
+      <dd>
+         @Html.Raw(Model.es_student.sno +"("+ Model.es_student.real_name+")")
+      </dd>
+
+      <dt>作答时间</dt>
+      <dd>
+         @{ 
+            var diff = Convert.ToDateTime(Model.end_time) - Convert.ToDateTime(Model.begin_time);
+            @Html.Raw(diff.Hours + ":" + diff.Minutes + ":" + diff.Seconds)
+         }
+      </dd>
+
+      <dt>成绩</dt>
+      <dd>
+         @Html.DisplayFor(model => model.score)
+      </dd>
+   </dl>
+</div>
+<p>
+   @Html.ActionLink("Edit", "Edit", new { id = Model.id }) |
+   @Html.ActionLink("Back to List", "Index")
+</p>

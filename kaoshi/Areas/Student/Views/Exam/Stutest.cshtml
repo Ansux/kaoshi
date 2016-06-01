@@ -1,0 +1,138 @@
+﻿@{
+   ViewBag.Title = "Result";
+}
+
+@section Styles{
+   <style>
+      .test-items {
+         margin-bottom: 20px;
+      }
+
+         .test-items .radio {
+            margin-bottom: 0px;
+         }
+
+      .t-list .ok {
+         background-color: forestgreen;
+         color: white;
+      }
+
+      .t-list span {
+         display: inline-block;
+         margin-bottom: 5px;
+         margin-right: 5px;
+         padding: 3px 10px;
+         background: #ccc;
+         color: #333;
+      }
+      .alert-danger{
+         padding:10px;
+         margin-top:5px;
+      }
+   </style>
+}
+
+<h2>Result</h2>
+
+<p>
+   @Html.ActionLink("Create New", "Create")
+</p>
+
+<div class="row" ng-app="myApp" ng-controller="TestContrl">
+   <div class="col-md-12">
+      <div class="header"><h4>试卷预览</h4></div>
+      <div class="panel panel-success" ng-repeat="c in composes">
+         <div class="panel-heading clearfix">
+            <div class="pull-left">
+               <span ng-bind="c.type"></span>.
+               <span ng-bind="c.typeName"></span>
+               <span>({{c.tests.length}}/{{c.number}})</span>
+            </div>
+            <div class="pull-right">
+               <span ng-bind="c.value"></span>x
+               <span ng-bind="c.number"></span>=
+               <span ng-bind="c.value*c.number"></span>
+            </div>
+         </div>
+         <div class="panel-body">
+            <div class="test-items" ng-repeat="t in c.tests">
+               @* 题目信息 *@
+               <div class="test clearfix" ng-cloak>
+                  <div class="title clearfix">
+                     <span class="fleft" ng-cloak>({{$index+1}})</span>
+                     <span class="content" ng-cloak>{{t.title}} (<span ng-bind="t.result"></span>)</span>
+                  </div>
+               </div>
+               @* 题目选项 *@
+               <div class="test-options clearfix" ng-repeat="o in t.options">
+                  <div class="radio" ng-style="style(t.userOption,t.result,o.abcd)">
+                     <label>
+                        <span ng-bind="o.abcd"></span>
+                        <span ng-bind="o.content"></span>
+                        <span class="glyphicon" ng-class="{true:'glyphicon-ok',false:'glyphicon-remove'}[check(t.userOption,t.result,o.abcd)]"></span>
+                     </label>
+                  </div>
+               </div>
+               @* 用户选项 *@
+               <div class="alert alert-danger" ng-if="t.userOption!=t.result">
+                  <span ng-bind-template="正确答案：{{t.result}}"></span>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+</div>
+
+@section Scripts{
+   <script src="~/Scripts/angular.min.js"></script>
+   <script>
+      angular.module("myApp", [])
+      .controller("TestContrl", function ($scope, $http) {
+
+         // 获取题目和用户填写的选项
+         $http.get('/student/exam/GetPaperTests?pid=@ViewData["pid"]').success(function (res) {
+            $scope.composes = res.composes;
+            $http.get('/student/exam/GetStuTest?eid=@ViewData["eid"]').success(function (data) {
+               angular.forEach($scope.composes,function(compose,key){
+                  angular.forEach(compose.tests,function(test,k){
+                     angular.forEach(data.tests,function(t,i){
+                        if(t.test == test.id){
+                           test.userOption = t.result;
+                        }
+                     });
+                  });
+               });
+            });
+         });
+
+         // 根据用户答题的正确性来着色。
+         $scope.style = function(userOption,result,abcd){
+            if(userOption==abcd){
+               if(userOption==result){
+                  return {
+                     "color" : "#468847",
+                     "background-color" : "#dff0d8",
+                  }
+               }else{
+                  return {
+                     "color" : "#b94a48",
+                     "background-color" : "#f2dede",
+                  }
+               }
+            }
+         }
+
+         // 根据用户答题的正确性来着色。
+         $scope.check = function (userOption, result, abcd) {
+            if (userOption == abcd) {
+               if (userOption == result) {
+                  return true;
+               } else {
+                  return false;
+               }
+            }
+         }
+
+      })
+   </script>
+}

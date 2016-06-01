@@ -1,0 +1,58 @@
+﻿@model IEnumerable<kaoshi.Models.es_paper_compose>
+
+@{
+   ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+   @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+   <tr>
+      <th>
+         @Html.DisplayNameFor(model => model.es_paper.name)
+      </th>
+      <th>
+         @Html.DisplayNameFor(model => model.es_test_type.name)
+      </th>
+      <th>
+         @Html.DisplayNameFor(model => model.value)
+      </th>
+      <th>
+         @Html.DisplayNameFor(model => model.number)
+      </th>
+      <th>
+         @Html.DisplayNameFor(model => model.tests)
+      </th>
+      <th></th>
+   </tr>
+
+   @foreach (var item in Model)
+   {
+      <tr>
+         <td>
+            @Html.DisplayFor(modelItem => item.es_paper.name)
+         </td>
+         <td>
+            @Html.DisplayFor(modelItem => item.es_test_type.name)
+         </td>
+         <td>
+            @Html.DisplayFor(modelItem => item.value)
+         </td>
+         <td>
+            @Html.DisplayFor(modelItem => item.number)
+         </td>
+         <td>
+            @Html.DisplayFor(modelItem => item.tests)
+         </td>
+         <td>
+            @Html.ActionLink("Edit", "Edit", new { id = item.id }) |
+            @Html.ActionLink("Details", "Details", new { id = item.id }) |
+            @Html.ActionLink("Delete", "Delete", new { id = item.id })
+         </td>
+      </tr>
+   }
+
+</table>

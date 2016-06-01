@@ -1,0 +1,50 @@
+﻿@model IEnumerable<kaoshi.Models.es_paper>
+
+@{
+   ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+   @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+   <tr>
+      <th>试卷名称</th>
+      <th>科目</th>
+      <th>(A/B)卷</th>
+      <th>时长</th>
+      <th>总分</th>
+      <th>状态</th>
+      <th>操作</th>
+   </tr>
+
+   @foreach (var item in Model)
+   {
+      <tr>
+         <td>
+            @Html.DisplayFor(modelItem => item.name)
+         </td>
+         <td>
+            @Html.DisplayFor(modelItem => item.es_subject.name)
+         </td>
+         <td>
+            @Html.DisplayFor(modelItem => item.ab_paging)
+         </td>
+         <td>
+            @Html.DisplayFor(modelItem => item.test_time)
+         </td>
+         <td>
+            @Html.DisplayFor(modelItem => item.total_points)
+         </td>
+         <td>
+            @Html.DisplayFor(modelItem => item.status)
+         </td>
+         <td>
+            <a href="/student/exam/testing/@item.id">进入答题</a>
+         </td>
+      </tr>
+   }
+
+</table>

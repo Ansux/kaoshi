@@ -1,0 +1,44 @@
+﻿@model IEnumerable<kaoshi.Models.es_student>
+
+@{
+   ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<p>
+   <span>班名</span>
+
+   <span>
+      @ViewData["cname"]
+   </span>
+</p>
+<div>
+   <table class="table">
+      <tr>
+         <th>学号</th>
+         <th>姓名</th>
+         <th>操作</th>
+      </tr>
+      @foreach (var item in Model)
+      {
+         <tr>
+            <td>
+               @Html.DisplayFor(modelItem => item.sno)
+            </td>
+            <td>
+               @Html.DisplayFor(modelItem => item.real_name)
+            </td>
+            <td>
+               @Html.ActionLink("Edit", "Edit", new { id = item.sno }) |
+               @Html.ActionLink("Details", "Details", new { id = item.sno }) |
+               @Html.ActionLink("Delete", "Delete", new { id = item.sno })
+            </td>
+         </tr>
+      }
+   </table>
+</div>
+<p>
+   @Html.ActionLink("Edit", "Edit", new { id = ViewData["cno"] }) |
+   @Html.ActionLink("Back to List", "Index")
+</p>

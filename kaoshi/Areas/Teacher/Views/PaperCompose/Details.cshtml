@@ -1,0 +1,58 @@
+﻿@model kaoshi.Models.es_paper_compose
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>es_paper_compose</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.es_paper.name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.es_paper.name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.es_test_type.name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.es_test_type.name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.value)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.value)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.number)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.number)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.tests)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.tests)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

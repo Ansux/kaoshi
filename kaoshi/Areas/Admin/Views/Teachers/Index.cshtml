@@ -1,0 +1,45 @@
+﻿@model IEnumerable<kaoshi.Models.es_teacher>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>登录名</th>
+        <th>密码</th>
+        <th>姓名</th>
+        <th>性别</th>
+        <th>Email</th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.login_id)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.login_pwd)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.real_name)
+        </td>
+        <td>@Html.Raw(item.sex == 1 ? "男" : "女")</td>
+        <td>
+            @Html.DisplayFor(modelItem => item.email)
+        </td>
+        <td>
+            @Html.ActionLink("编辑", "Edit", new { id=item.id }) |
+            @Html.ActionLink("详情", "Details", new { id=item.id }) |
+            @Html.ActionLink("删除", "Delete", new { id=item.id })
+        </td>
+    </tr>
+}
+
+</table>

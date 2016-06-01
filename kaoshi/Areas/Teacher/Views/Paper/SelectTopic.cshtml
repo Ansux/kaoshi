@@ -1,0 +1,344 @@
+﻿@model kaoshi.Models.es_paper
+
+@{
+   ViewBag.Title = "SelectTopic";
+}
+
+<style type="text/css">
+   .paper-info blockquote{
+      border:solid 1px #eee;
+      border-left:solid 3px #eee;
+   }
+   .test {
+      padding: 8px 2px;
+      background: #337AB7;
+      color: white;
+   }
+
+   .test-header {
+      padding: 8px 2px;
+      background: #C4CBCD;
+      margin-bottom: 5px;
+   }
+
+   .test-items {
+      margin-bottom: 10px;
+   }
+
+      .test-items .answer {
+         background: #f2dede;
+      }
+
+   .test-options {
+      padding: 8px 2px;
+      background: #F5F5F5;
+      border-bottom: solid 1px #ddd;
+   }
+
+      .test-options span, .test .input-group span {
+         cursor: pointer;
+         color: #333;
+      }
+
+   .test .fleft {
+      position: absolute;
+      display: block;
+      width: 25px;
+   }
+
+   .test span.content {
+      margin-left: 30px;
+      margin-right: 60px;
+      display: block;
+   }
+
+   .test span.fright {
+      position: absolute;
+      top: 0;
+      right: 10px;
+      display: block;
+   }
+
+   .test-container .control {
+      margin-bottom: 20px;
+   }
+
+   .panel-body {
+      padding: 5px;
+   }
+</style>
+
+<h2>选题中心</h2>
+<div class="paper-info">
+   <blockquote>
+      <dl class="dl-horizontal">
+         <dt>
+            @Html.DisplayNameFor(model => model.es_subject.name)
+         </dt>
+         <dd>
+            @Html.DisplayFor(model => model.es_subject.name)
+         </dd>
+         <dt>
+            @Html.DisplayNameFor(model => model.name)
+         </dt>
+         <dd>
+            @Html.DisplayFor(model => model.name)
+         </dd>
+         <dt>
+            @Html.DisplayNameFor(model => model.ab_paging)
+         </dt>
+         <dd>
+            @Html.DisplayFor(model => model.ab_paging)
+         </dd>
+         <dt>
+            @Html.DisplayNameFor(model => model.test_time)
+         </dt>
+         <dd>
+            @Html.DisplayFor(model => model.test_time)
+         </dd>
+
+         <dt>
+            @Html.DisplayNameFor(model => model.total_points)
+         </dt>
+
+         <dd>
+            @Html.DisplayFor(model => model.total_points)
+         </dd>
+      </dl>
+   </blockquote>
+</div>
+
+<div class="compose-box" ng-app="myApp" ng-controller="Control">
+   @* 提示框 *@
+   <div ng-if="getCount()" class="alert alert-success container">
+      <span class="glyphicon glyphicon-exclamation-sign"></span>
+      <span class="sr-only">提示:</span>试卷题目筛选完毕！
+      <a ng-click="confirm()">[提交试卷]</a>
+   </div>
+   <div class="row clearfix">
+      <div class="col-md-6 test-container">
+         <div class="header"><h4>题库中心</h4></div>
+         <div class="control">
+            <div class="input-group">
+               <span class="input-group-addon" id="sizing-addon2">题型</span>
+               <select class="form-control" ng-model="type" ng-change="getList()">
+                  <option value="-1">请选择题型</option>
+                  <option ng-repeat="t in types" value="{{t.id}}" ng-if="t.flag">{{t.name}}</option>
+               </select>
+            </div>
+         </div>
+         <div class="test-list">
+            <div ng-if="tests.length==0" class="alert alert-danger">
+               <span class="glyphicon glyphicon-exclamation-sign"></span>
+               <span class="sr-only">警告:</span>题库不足，请添加题库！
+            </div>
+            <div class="test-items" ng-repeat="t in tests">
+               @* 题目信息 *@
+               <div class="test clearfix" ng-cloak>
+                  <div class="col-sm-12 title clearfix">
+                     <span class="fleft" ng-cloak>({{$index+1}})</span>
+                     <span class="content" ng-cloak>{{t.title}} (<span ng-bind="t.result"></span>)</span>
+                     <span class="fright"><button ng-disabled="canAdd(t.type)" class="btn btn-danger btn-xs" ng-click="add($index,t)">加入试卷</button></span>
+                  </div>
+               </div>
+               @* 题目选项 *@
+               <div class="test-options clearfix" ng-class="{'answer':t.result.indexOf(o.abcd)>-1}" ng-repeat="o in t.options">
+                  <div class="col-sm-1" ng-bind="o.abcd"></div>
+                  <div class="col-sm-10" ng-cloak>
+                     <span ng-bind="o.content"></span>
+                  </div>
+                  <div class="col-sm-1"><span ng-if="t.result.indexOf(o.abcd)>-1" class="glyphicon glyphicon-ok"></span></div>
+               </div>
+            </div>
+         </div>
+      </div>
+      <div class="col-md-6 paper-views">
+         <div class="header"><h4>试卷预览</h4></div>
+         <div class="panel panel-success" ng-repeat="c in composes">
+            <div class="panel-heading clearfix">
+               <div class="pull-left">
+                  <span ng-bind="$index+1"></span>.
+                  <span ng-bind="c.typeName"></span>
+                  <span>({{c.tests.length}}/{{c.number}})</span>
+               </div>
+               <div class="pull-right">
+                  <span ng-bind="c.value"></span>x
+                  <span ng-bind="c.number"></span>=
+                  <span ng-bind="c.value*c.number"></span>
+               </div>
+            </div>
+            <div class="panel-body">
+               <div class="test-items" ng-repeat="t in c.tests">
+                  @* 题目信息 *@
+                  <div class="test clearfix" ng-cloak>
+                     <div class="col-sm-12 title clearfix">
+                        <span class="fleft" ng-cloak>({{$index+1}})</span>
+                        <span class="content" ng-cloak>{{t.title}} (<span ng-bind="t.result"></span>)</span>
+                        <span class="fright"><button class="btn btn-danger btn-xs" ng-click="remove($index,c,t)">移除</button></span>
+                     </div>
+                  </div>
+                  @* 题目选项 *@
+                  <div class="test-options clearfix" ng-class="{'answer':(t.result.indexOf(o.abcd)>-1)}" ng-repeat="o in t.options">
+                     <div class="col-sm-1" ng-bind="o.abcd"></div>
+                     <div class="col-sm-10" ng-cloak>
+                        <span ng-bind="o.content"></span>
+                     </div>
+                     <div class="col-sm-1"><span ng-if="t.result.indexOf(o.abcd)>-1" class="glyphicon glyphicon-ok"></span></div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+</div>
+
+@section Scripts{
+   <script src="~/Scripts/angular.min.js"></script>
+   <script>
+      angular.module('myApp', [], function ($httpProvider) {
+         $httpProvider.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=utf-8';
+         $httpProvider.defaults.transformRequest = [function (data) {
+            var param = function (obj) {
+               var query = '';
+               var name, value, fullSubName, subName, subValue, innerObj, i;
+               for (name in obj) {
+                  value = obj[name];
+                  if (value instanceof Array) {
+                     for (i = 0; i < value.length; ++i) {
+                        subValue = value[i];
+                        fullSubName = name + '[' + i + ']';
+                        innerObj = {};
+                        innerObj[fullSubName] = subValue;
+                        query += param(innerObj) + '&';
+                     }
+                  } else if (value instanceof Object) {
+                     for (subName in value) {
+                        subValue = value[subName];
+                        fullSubName = name + '[' + subName + ']';
+                        innerObj = {};
+                        innerObj[fullSubName] = subValue;
+                        query += param(innerObj) + '&';
+                     }
+                  } else if (value !== undefined && value !== null) {
+                     query += encodeURIComponent(name) + '=' + encodeURIComponent(value) + '&';
+                  }
+               }
+               return query.length ? query.substr(0, query.length - 1) : query;
+            };
+            return angular.isObject(data) && String(data) !== '[object File]' ? param(data) : data;
+         }];
+      })
+      .controller('Control', function ($scope,$http,$timeout) {
+
+         $http.post('/teacher/paper/GetComposes', {id : @Model.id}).success(function(res){
+            $scope.composes = res.composes;
+
+            // 获取题型下拉
+            $scope.type = '-1';
+            $http.get('/teacher/papercompose/getTypeList').success(function(res){
+               $scope.types = res.types;
+               angular.forEach($scope.composes,function(d,i){
+                  angular.forEach($scope.types,function(a,k){
+                     if(d.type==a.id){
+                        a.flag = true;
+                     }
+                  });
+               });
+            });
+         });
+
+         // 获取题目列表
+         $scope.getList = function () {
+            var type = $scope.type;
+            if(type != '-1'){
+               $http.get('/teacher/PaperCompose/GetTestList?sid=' + @Model.subject + '&tid=' + type).success(function (res) {
+                  $scope.tests = res.tests;
+
+                  // 循环组卷中的题目，与搜索出的题目列表进行匹配，去掉题目列表中存在与组卷中的题目
+                  angular.forEach($scope.composes,function(d1,i1){
+                     angular.forEach(d1.tests,function(d2,i2){
+                        angular.forEach($scope.tests,function(a,k){
+                           if(d2.id == a.id){
+                              $scope.tests.splice(k,1);
+                           }
+                        })
+                     })
+                  });
+               });
+            }
+         }
+
+         $scope.canAdd = function(type) {
+            var flag = false;
+            angular.forEach($scope.composes,function(d,i){
+               if(d.type==type){
+                  if(d.tests.length>=d.number){
+                     flag = true;
+                  }
+               }
+            });
+            return flag;
+         }
+
+         // 添加题目
+         $scope.add = function(index,model) {
+            var composeId = undefined;
+            // 判断此试题属于哪个组卷
+            angular.forEach($scope.composes,function(d,i){
+               if(d.type==model.type){
+                  composeId = d.id;
+                  d.tests.push(model);
+               }
+            });
+            // model.isShow = false;
+            $http.post('/teacher/papercompose/AddTest',{composeId: composeId,testId: model.id}).success(function(res){
+               if(res==true){
+                  $scope.tests.splice(index,1);
+               }
+            });
+
+         }
+
+         $scope.remove = function(index,compose,test){
+            $http.post('/teacher/papercompose/RemoveTest',{composeId:compose.id,testId:test.id}).success(function(res){
+               if(res==true){
+                  compose.tests.splice(index,1);
+                  if($scope.tests!=undefined){
+                     if($scope.type == compose.type){
+                        $scope.tests.push(test);
+                     }
+                  }
+               }
+            });
+         }
+
+         // 用于检测组卷题目是否完成
+         $scope.getCount = function () {
+            var flag = true;
+            angular.forEach($scope.composes, function (data, index, array) {
+               if(data.number != data.tests.length){
+                  flag = false;
+               }
+            });
+            return flag;
+         };
+
+         $scope.getCount();
+
+         // 完成试题筛选
+         $scope.confirm = function(){
+            $http.post('/teacher/paper/Complete',{id:@Model.id}).success(function(res){
+               if(res==true){
+                  location.href = '/teacher/paper/';
+               }
+            });
+         }
+
+      });
+   </script>
+}
+
+<p>
+   @Html.ActionLink("Edit", "Edit", new { id = Model.id }) |
+   @Html.ActionLink("Back to List", "Index")
+</p>

@@ -1,0 +1,197 @@
+﻿@model kaoshi.Models.es_paper
+
+@{
+   ViewBag.Title = "Testing";
+}
+
+@section Styles{
+   <style>
+      .test-items {
+         margin-bottom: 20px;
+      }
+
+         .test-items .radio {
+            margin-bottom: 0px;
+         }
+
+      .t-list .ok {
+         background-color: forestgreen;
+         color: white;
+      }
+
+      .t-list span {
+         display: inline-block;
+         margin-bottom: 5px;
+         margin-right: 5px;
+         padding: 3px 10px;
+         background: #ccc;
+         color: #333;
+      }
+   </style>
+}
+
+<h2>Testing</h2>
+
+<p>
+   @Html.ActionLink("Create New", "Create")
+</p>
+
+<div class="row" ng-app="myApp" ng-controller="TestContrl">
+   <div class="col-md-9">
+      <div class="header"><h4>试卷预览</h4></div>
+      <div class="panel panel-success" ng-repeat="c in composes">
+         <div class="panel-heading clearfix">
+            <div class="pull-left">
+               <span ng-bind="c.type"></span>.
+               <span ng-bind="c.typeName"></span>
+               <span>({{c.tests.length}}/{{c.number}})</span>
+            </div>
+            <div class="pull-right">
+               <span ng-bind="c.value"></span>x
+               <span ng-bind="c.number"></span>=
+               <span ng-bind="c.value*c.number"></span>
+            </div>
+         </div>
+         <div class="panel-body">
+            <div class="test-items" ng-repeat="t in c.tests">
+               @* 题目信息 *@
+               <div class="test clearfix" ng-cloak>
+                  <div class="title clearfix">
+                     <span class="fleft" ng-cloak>({{$index+1}})</span>
+                     <span class="content" ng-cloak>{{t.title}} (<span ng-bind="t.result"></span>)</span>
+                  </div>
+               </div>
+               @* 题目选项 *@
+               <div class="test-options clearfix" ng-class="{'answer':(t.result.indexOf(o.abcd)>-1)}" ng-repeat="o in t.options">
+                  <div class="radio" ng-cloak>
+                     <label>
+                        <input type="radio" name="{{t.id}}" ng-model="t.userOption" value="{{o.abcd}}" ng-change="change(t.id,t.userOption)">
+                        <span ng-bind="o.abcd"></span>
+                        <span ng-bind="o.content"></span>
+                     </label>
+                  </div>
+               </div>
+               @* 用户选项
+                  <div class="user-options">
+                     <div class="radio-inline">
+                        <label>
+                           <input type="radio" ng-model="userOption" value="A"> A
+                        </label>
+                     </div>
+                     <div class="radio-inline">
+                        <label>
+                           <input type="radio" ng-model="userOption" value="B"> B
+                        </label>
+                     </div>
+                     <div class="radio-inline">
+                        <label>
+                           <input type="radio" ng-model="userOption" value="C"> C
+                        </label>
+                     </div>
+                  </div>
+               *@
+            </div>
+         </div>
+      </div>
+      <div>
+         <button class="btn btn-success" ng-click="submit()">提交答卷</button>
+      </div>
+   </div>
+   <div class="col-md-3">
+      <div ng-repeat="c in composes">
+         <span ng-bind="c.typeName"></span>
+         <div class="t-list">
+            <span ng-repeat="t in c.tests" ng-class="{'ok':t.userOption!=undefined}">
+               <i ng-bind="$index+1"></i>
+            </span>
+         </div>
+      </div>
+   </div>
+</div>
+
+@section Scripts{
+   <script src="~/Scripts/angular.min.js"></script>
+   <script>
+      angular.module("myApp", [], function ($httpProvider) {
+         $httpProvider.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=utf-8';
+         $httpProvider.defaults.transformRequest = [function (data) {
+            var param = function (obj) {
+               var query = '';
+               var name, value, fullSubName, subName, subValue, innerObj, i;
+               for (name in obj) {
+                  value = obj[name];
+                  if (value instanceof Array) {
+                     for (i = 0; i < value.length; ++i) {
+                        subValue = value[i];
+                        fullSubName = name + '[' + i + ']';
+                        innerObj = {};
+                        innerObj[fullSubName] = subValue;
+                        query += param(innerObj) + '&';
+                     }
+                  } else if (value instanceof Object) {
+                     for (subName in value) {
+                        subValue = value[subName];
+                        fullSubName = name + '[' + subName + ']';
+                        innerObj = {};
+                        innerObj[fullSubName] = subValue;
+                        query += param(innerObj) + '&';
+                     }
+                  } else if (value !== undefined && value !== null) {
+                     query += encodeURIComponent(name) + '=' + encodeURIComponent(value) + '&';
+                  }
+               }
+               return query.length ? query.substr(0, query.length - 1) : query;
+            };
+            return angular.isObject(data) && String(data) !== '[object File]' ? param(data) : data;
+         }];
+      })
+      .controller("TestContrl", function ($scope, $http) {
+
+         // 获取题目和用户填写的选项
+         $http.get('/student/paper/GetPaperTests/@Model.id').success(function (res) {
+            $scope.composes = res.composes;
+            $http.get('/student/paper/GetStuTest?pid=@ViewData["stuPaperId"]').success(function(data){
+               angular.forEach($scope.composes,function(compose,key){
+                  angular.forEach(compose.tests,function(test,k){
+                     angular.forEach(data.tests,function(t,i){
+                        if(t.test == test.id){
+                           test.userOption = t.result;
+                        }
+                     });
+                  });
+               });
+            });
+         });
+
+         // 用户答题临时存储
+         $scope.change = function (tid, option) {
+            $http.post('/student/paper/SaveUserOption', { pid: @ViewData["stuPaperId"], tid: tid, option: option }).success(function (res) {
+               console.log(res);
+            });
+         };
+
+         $scope.submit = function(){
+            var tempArr = [];
+            angular.forEach($scope.composes,function(compose,key){
+               angular.forEach(compose.tests,function(test,k){
+                  if(test.userOption==undefined){
+                     tempArr.push(test);
+                  }
+               });
+            });
+            var flag = null;
+            if(tempArr.length>0){
+               flag = confirm("您还有"+tempArr.length+"道题没有作答呢！");
+            }else{
+               flag = confirm("确定要提交么！");
+            }
+            if(flag){
+               $http.post('/student/paper/submit',{pid: @ViewData["stuPaperId"]}).success(function(res){
+                  window.location.href = '/student/paper/result?pid=@ViewData["stuPaperId"]';
+               });
+            }
+         };
+
+      })
+   </script>
+}

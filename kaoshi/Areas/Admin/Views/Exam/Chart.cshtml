@@ -1,0 +1,32 @@
+﻿@model IEnumerable<kaoshi.Models.es_exam>
+
+@{
+   ViewBag.Title = "Chart";
+}
+
+<h2>考试统计</h2>
+
+<table class="table">
+   <tr>
+      <th>名称</th>
+      <th>考试时间</th>
+      <th>结束时间</th>
+      <th>操作</th>
+   </tr>
+   @foreach (var item in Model)
+   {
+      <tr>
+         <td>
+            @Html.DisplayFor(modelItem => item.name)
+         </td>
+         <td>
+            @Html.DisplayFor(modelItem => item.begin_time)
+         </td>
+         <td>
+            @Html.DisplayFor(modelItem => item.end_time)
+         </td>
+         <td>@Html.ActionLink("查看统计", "ChartDetail", new { id = item.id })</td>
+      </tr>
+   }
+
+</table>

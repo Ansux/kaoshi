@@ -1,0 +1,52 @@
+﻿@model kaoshi.Models.es_stu_exam
+
+@{
+   ViewBag.Title = "ViewDetail";
+}
+
+<h2>ViewDetail</h2>
+
+<div>
+   <h4>es_stu_exam</h4>
+   <hr />
+   <dl class="dl-horizontal">
+      <dt>
+         @Html.DisplayNameFor(model => model.es_exam.name)
+      </dt>
+      <dd>
+         @Html.DisplayFor(model => model.es_exam.name)
+      </dd>
+
+      <dt>学号</dt>
+      <dd>@Model.es_student.sno</dd>
+
+      <dt>姓名</dt>
+      <dd>@Model.es_student.real_name</dd>
+
+      <dt>
+         @Html.DisplayNameFor(model => model.begin_time)
+      </dt>
+      <dd>
+         @Html.DisplayFor(model => model.begin_time)
+      </dd>
+
+      <dt>
+         @Html.DisplayNameFor(model => model.end_time)
+      </dt>
+      <dd>
+         @Html.DisplayFor(model => model.end_time)
+      </dd>
+
+      <dt>
+         @Html.DisplayNameFor(model => model.score)
+      </dt>
+      <dd>
+         @Html.DisplayFor(model => model.score)
+      </dd>
+
+   </dl>
+</div>
+<p>
+   @Html.ActionLink("Edit", "Edit", new { id = Model.id }) |
+   @Html.ActionLink("Back to List", "Index")
+</p>

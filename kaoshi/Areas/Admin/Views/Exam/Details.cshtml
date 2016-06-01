@@ -1,0 +1,71 @@
+﻿@model kaoshi.Models.es_exam
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>es_exam</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.status)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.status)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.begin_time)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.begin_time)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.end_time)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.end_time)
+        </dd>
+
+    </dl>
+</div>
+<div>
+   <h4>参考学生列表</h4>
+   <table class="table">
+      <tr>
+         <th>学生学号</th>
+         <th>学生姓名</th>
+         <th>查看</th>
+      </tr>
+
+      @foreach (var item in Model.es_stu_exam)
+      {
+         <tr>
+            <td>@item.es_student.sno</td>
+            <td>@item.es_student.real_name</td>
+            <td>
+               @Html.ActionLink("查看", "viewDetail", new { sno = item.es_student.sno })
+            </td>
+         </tr>
+      }
+
+   </table>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

@@ -1,0 +1,312 @@
+﻿@model kaoshi.Models.es_paper_compose
+
+@{
+   ViewBag.Title = "Create";
+}
+
+@section Styles {
+   <style>
+      .page-header .info {
+         font-size: 16px;
+      }
+
+      .page-header .info span {
+         margin-right: 30px;
+         color: red;
+         font-weight: bold;
+      }
+   </style>
+}
+
+<div ng-app="myApp">
+   <div ng-controller="myCtrl">
+
+      @* 头部 *@
+      <div class="page-header">
+         <h3 ng-bind="paper.name"></h3>
+         <blockquote class="info">
+            <div>(A/B)卷 <span ng-bind="paper.ab_paging"></span>考试时长 <span ng-bind="paper.test_time"></span></div>
+            <div>总分/<span ng-bind="paper.total_points"></span>当前分值/<span ng-bind="getCount()"></span></div>
+         </blockquote>
+
+         <div ng-if="(getComposesCount()==paper.total_points)" class="alert alert-success">
+            <span class="glyphicon glyphicon-exclamation-sign"></span>
+            <span class="sr-only">提示:</span>试题组卷分配合理 
+            <a ng-if="paper.status==1" ng-click="confirm()">[确认组卷]</a>
+            <span ng-if="paper.status==2">
+               <a href="/teacher/Paper/SelectTopic/@ViewBag.paper">[手动选题]</a>
+               <a href="/teacher/Paper/MachineSelectTopic/@ViewBag.paper">[随机选题]</a>
+            </span>
+         </div>
+
+         <div ng-if="getCount()>paper.total_points" class="alert alert-danger">
+            <span class="glyphicon glyphicon-exclamation-sign"></span>
+            <span class="sr-only">警告:</span>当前组卷分值已超过试卷总分值 <span style="font-weight:bold" ng-bind="(getCount()-paper.total_points)"></span>分，请修改数据！
+         </div>
+
+         <div ng-if="(getCount()<paper.total_points)" class="alert alert-warning">
+            <span class="glyphicon glyphicon-exclamation-sign"></span>
+            <span class="sr-only">警告:</span>当前分值为达到试卷总分值，还需 <span style="font-weight:bold" ng-bind="(paper.total_points-getCount())"></span> 分，请修改数据！
+         </div>
+      </div>
+
+      @* 列表 *@
+      <div class="">
+         <table class="table">
+            <thead>
+               <tr>
+                  <th class="col-xs-3 col-md-3">题型</th>
+                  <th class="col-xs-3 col-md-3">分值</th>
+                  <th class="col-xs-2 col-md-2">数量</th>
+                  <th class="col-xs-2 col-md-2">小计</th>
+                  <th class="col-xs-2 col-md-2">操作</th>
+               </tr>
+            </thead>
+            <tbody>
+               <tr class="composes-item" ng-repeat="c in paper.composes">
+                  <td ng-bind="c.tname"></td>
+                  <td>
+                     <span ng-if="!c.editFlag" ng-bind="c.value"></span>
+                     <input ng-if="c.editFlag" ng-model="c.value" ng-change="change(c)" type="number" min="1" class="form-control" value="{{c.value}}" required />
+                  </td>
+                  <td>
+                     <span ng-if="!c.editFlag" ng-bind="c.number"></span>
+                     <input ng-if="c.editFlag" ng-model="c.number" ng-change="change(c)" type="number" min="1" class="form-control" value="{{c.number}}" required />
+                  </td>
+                  <td ng-bind="c.value*c.number"></td>
+                  <td>
+                     <span class="hidden"></span>
+                     <div ng-if="!c.editFlag&&(paper.status>=1)" class="btn-group" role="group" aria-label="...">
+                        <button class="btn btn-sm btn-warning" ng-class="{'active':c.editFlag}" ng-click="edit($event,c)">编辑</button>
+                        <button ng-click="del(c,paper.composes,$index)" class="btn btn-sm btn-danger">删除</button>
+                     </div>
+                     <div ng-if="c.editFlag" class="btn-group" role="group" aria-label="...">
+                        <button ng-disabled="getCount()>paper.total_points" type="button" ng-click="save(c)" class="btn btn-sm btn-primary">保存</button>
+                        <button type="button" class="btn btn-sm btn-default" ng-click="reset($event,c)">取消</button>
+                     </div>
+                  </td>
+               </tr>
+            </tbody>
+         </table>
+      </div>
+
+      @* 表单 *@
+      <form name="composeForm" ng-submit="composeSubmit()" ng-if="(types.length>paper.composes.length)&&(getComposesCount()!=paper.total_points)">
+         <table class="table">
+            <tr>
+               <td class="col-xs-3 col-md-3">
+                  <select class="form-control" name="test_type" ng-model="compose.type" ng-init="compose.type='0'">
+                     <option value="0">请选择题型</option>
+                     <option ng-repeat="t in types" value="{{t.id}}" ng-if="t.flag">{{t.name}}</option>
+                  </select>
+               </td>
+               <td class="col-xs-3 col-md-3">
+                  <input type="number" ng-model="compose.value" value="1" class="form-control" placeholder="分值" required />
+               </td>
+               <td class="col-xs-2 col-md-2">
+                  <input type="number" ng-model="compose.number" value="1" class="form-control" placeholder="题量" required />
+               </td>
+               <td class="col-xs-2 col-md-2">
+                  <span ng-bind="compose.value*compose.number|parseNaN"></span>
+               </td>
+               <td class="col-xs-2 col-md-2">
+                  <input type="submit" value="提交" ng-disabled="(getCount()>paper.total_points)||compose.type=='0'||compose.value*compose.number<=0||composeForm.$invalid" class="btn btn-sm btn-primary" />
+               </td>
+            </tr>
+         </table>
+      </form>
+   </div>
+</div>
+
+<div>
+   @Html.ActionLink("Back to List", "Index")
+</div>
+
+@section Scripts{
+   <script src="~/Scripts/angular.min.js"></script>
+   <script>
+      angular.module('myApp', [], function ($httpProvider) {
+         $httpProvider.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=utf-8';
+         $httpProvider.defaults.transformRequest = [function (data) {
+            var param = function (obj) {
+               var query = '';
+               var name, value, fullSubName, subName, subValue, innerObj, i;
+               for (name in obj) {
+                  value = obj[name];
+                  if (value instanceof Array) {
+                     for (i = 0; i < value.length; ++i) {
+                        subValue = value[i];
+                        fullSubName = name + '[' + i + ']';
+                        innerObj = {};
+                        innerObj[fullSubName] = subValue;
+                        query += param(innerObj) + '&';
+                     }
+                  } else if (value instanceof Object) {
+                     for (subName in value) {
+                        subValue = value[subName];
+                        fullSubName = name + '[' + subName + ']';
+                        innerObj = {};
+                        innerObj[fullSubName] = subValue;
+                        query += param(innerObj) + '&';
+                     }
+                  } else if (value !== undefined && value !== null) {
+                     query += encodeURIComponent(name) + '=' + encodeURIComponent(value) + '&';
+                  }
+               }
+               return query.length ? query.substr(0, query.length - 1) : query;
+            };
+            return angular.isObject(data) && String(data) !== '[object File]' ? param(data) : data;
+         }];
+      })
+         .controller('myCtrl', function ($scope,$q, $http, $timeout) {
+            // 编辑处理事件
+            $scope.edit = function($event,model){
+               model.editFlag=!model.editFlag;
+               var target = $($event.target).parent().prev();
+               $(target).attr('data-value',model.value);
+               $(target).attr('data-number',model.number);
+            }
+
+            $scope.change = function(model){
+               if (model.value == undefined){
+                  model.value = 0;
+               }
+               if(model.number == undefined){
+                  model.number = 0;
+               }
+            }
+
+            // 返回处理事件
+            $scope.reset = function($event,model){
+               var target = $($event.target).parent().prev();
+               var value = $(target).attr('data-value');
+               var number = $(target).attr('data-number');
+               model.editFlag=!model.editFlag;
+               model.value = parseFloat(value);
+               model.number = parseInt(number);
+            }
+
+            $scope.del = function(model,composes,index){
+               $http.post('/teacher/papercompose/delete', {id:model.id}).success(function(res){
+                  composes.splice(index,1);
+                  angular.forEach($scope.types,function(d,i){
+                     if(d.id == model.type){
+                        console.log(d);
+                        d.flag = true;
+                     }
+                  })
+               });
+            }
+
+            $scope.save = function(model){
+               console.log(model);
+               var compose = {
+                  id: model.id,
+                  type: model.tid,
+                  value: model.value,
+                  number: model.number,
+                  paper: $scope.paper.id
+               };
+               $http.post('/teacher/papercompose/save',compose).success(function(res){
+                  if(res==true){
+                     model.editFlag = false;
+                  }
+               });
+            }
+
+            $scope.paper = {};
+            $http.get('/teacher/papercompose/getTypeList').success(function(res){
+               $scope.types = res.types;
+            });
+
+            $http.get('/teacher/papercompose/GetPaperInfo?id='+@ViewBag.paper).success(function(res){
+               $scope.paper =  res;
+               angular.forEach($scope.types,function(d1,i1){
+                  var flag = false;
+                  angular.forEach($scope.paper.composes,function(d2,i2){
+                     if(d1.id==d2.tid){
+                        flag = true;
+                     }
+                  });
+                  if(flag == false){
+                     d1.flag = true;
+                  }
+               });
+            });
+
+            $scope.compose = {
+               value : 0,
+               number: 0
+            };
+
+            // 获取已存在组卷分值
+            $scope.getComposesCount = function(){
+               var count = 0;
+               angular.forEach($scope.paper.composes, function (data, index, array) {
+                  count += (data.value * data.number);
+               })
+               return count;
+            }
+
+            // 获取已存在组卷分值+表单临时分值总和
+            $scope.getCount = function () {
+               var tempValue = $scope.compose.value * $scope.compose.number;
+               $scope.count = isNaN(tempValue) ? 0:tempValue;
+               $scope.count += $scope.getComposesCount();
+               return $scope.count;
+            };
+
+            
+
+            $scope.composeSubmit = function(){
+               var compose = $scope.compose;
+               compose.paper = $scope.paper.id;
+               $http.post('/teacher/papercompose/create',compose).success(function(res){
+                  $scope.paper.composes.push(res);
+                  $scope.count += res.value * res.number;
+
+                  // 隐藏掉该题型
+                  angular.forEach($scope.types,function(d,i){
+                     if(d.id==compose.type){
+                        d.flag = false;
+                        // 重置表单数据
+                        compose.type = '0';
+                        compose.number = 0;
+                        compose.value = 0;
+                     }
+                  })
+               });
+            }
+
+            $scope.confirm = function(){
+               $http.post('/teacher/paper/Confirm',{id:$scope.paper.id}).success(function(res){
+                  if(res==true){
+                     $scope.paper.status = 2;
+                  }
+               });
+            }
+         })
+         .filter('parseNaN',function(){
+            return function(value){
+               return isNaN(value) ? 0:value;
+            }
+         })
+         .filter('composeids',function(){
+            return function(types,composes){
+               var arrs = [];
+               angular.forEach(types,function(d1,i1){
+                  var flag = false;
+                  angular.forEach(composes,function(d2,i2){
+                     if(d1.id==d2.tid){
+                        flag = true;
+                     }
+                  });
+                  if(flag == false){
+                     arrs.push(d1);
+                  }
+               });
+               return arrs;
+            }
+         });
+   </script>
+}
