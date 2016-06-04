@@ -5,44 +5,19 @@
 }
 
 @section Styles{
-   <style>
-      .test-items {
-         margin-bottom: 20px;
-      }
-
-         .test-items .radio {
-            margin-bottom: 0px;
-         }
-
-      .t-list .ok {
-         background-color: forestgreen;
-         color: white;
-      }
-
-      .t-list a {
-         display: inline-block;
-         margin-bottom: 5px;
-         margin-right: 5px;
-         padding: 3px 10px;
-         background: #ccc;
-         color: #333;
-      }
-      #card{
-         position:absolute;
-      }
-   </style>
 }
-
-<h2>Testing</h2>
-
-<p>
-   @Html.ActionLink("Create New", "Create")
-</p>
 
 <div class="row" ng-app="myApp" ng-controller="TestContrl">
    <div class="col-md-9">
-      <div class="header"><h4>试卷预览</h4></div>
-      <div class="panel panel-success" ng-repeat="c in composes">
+      <div class="clearfix exam-info">
+         <div class="name">@Model.name</div>
+         <div>
+            <span>总分（分）： @Model.es_paper.total_points</span>
+            <span>考试时长（分钟）： @Model.es_paper.test_time</span>
+         </div>
+         <div>考试时间： @Model.begin_time ~ @Model.end_time</div>
+      </div>
+      <div class="panel panel-default" ng-repeat="c in composes">
          <div class="panel-heading clearfix">
             <div class="pull-left">
                <span ng-bind="c.type"></span>.
@@ -77,22 +52,33 @@
             </div>
          </div>
       </div>
-      <div>
-         <button class="btn btn-success" ng-click="submit()">提交答卷</button>
-      </div>
    </div>
    <div class="col-md-3">
-      <div id="card">
-         <div ng-repeat="c in composes">
-            <span ng-bind="c.typeName"></span>
-            <div class="t-list">
-               <a ng-repeat="t in c.tests" ng-class="{'ok':t.userOption!=undefined}" href="#test{{t.id}}">
-                  <i ng-bind="$index+1"></i>
-               </a>
+      <div class="right-info">
+         <div class="section card" id="card">
+            <div class="title">答题卡</div>
+            <div class="wrap">
+               <div ng-repeat="c in composes">
+                  <span ng-bind="c.typeName"></span>
+                  <div class="t-list">
+                     <a ng-click="goTo(t.id)" ng-repeat="t in c.tests" ng-class="{'ok':t.userOption!=undefined}">
+                        <i ng-bind="$index+1"></i>
+                     </a>
+                  </div>
+               </div>
             </div>
          </div>
-         <div>
-            剩余时间：{{timeString}}
+         <div class="section time">
+            <div class="title">考试时间</div>
+            <div class="wrap">
+               <div class="img">
+                  <img src="~/Images/clock.jpg" alt="Alternate Text" />
+               </div>
+               <div>
+                  剩余：{{timeString}}
+               </div>
+               <div class="submit-btn"><button class="btn btn-success" ng-click="submit()">交卷</button></div>
+            </div>
          </div>
       </div>
    </div>
@@ -170,6 +156,12 @@
             $http.post('/student/exam/SaveUserOption', { eid: @ViewData["eid"], tid: tid, option: option }).success(function (res) {
                console.log(res);
             });
+            $('html,body').animate({scrollTop:$('#test'+tid).offset().top + 80},1000);
+         };
+
+         
+         $scope.goTo = function(id){
+            $('html,body').animate({scrollTop:$('#test'+id).offset().top - 80},1000);
          };
 
          $scope.submit = function(){
@@ -216,11 +208,6 @@
 
                $scope.timeString = hStr + ":" + mStr + ":" + sStr;
             },1000);
-
-            $(document).scroll(function(){
-               $('#card').css("top",$(document).scrollTop());
-            });
-
          })();
       })
    </script>

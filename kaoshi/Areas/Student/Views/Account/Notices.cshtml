@@ -1,0 +1,35 @@
+﻿@model IEnumerable<kaoshi.Models.es_notice>
+
+@{
+   ViewBag.Title = "Notices";
+}
+
+<div class="panel panel-default">
+   <div class="panel-heading">考试公告</div>
+   <div class="panel-body">
+      <table class="table">
+         <thead>
+            <tr>
+               <th>
+                  @Html.DisplayNameFor(model => model.title)
+               </th>
+               <th>发布时间</th>
+               <th>操作</th>
+            </tr>
+         </thead>
+         @foreach (var item in Model)
+         {
+            <tr>
+               <td>
+                  @Html.DisplayFor(modelItem => item.title)
+               </td>
+               <td>@item.create_at.ToShortDateString()</td>
+               <td>
+                  @Html.ActionLink("详情", "Notice", new { id = item.id })
+               </td>
+            </tr>
+         }
+
+      </table>
+   </div>
+</div>

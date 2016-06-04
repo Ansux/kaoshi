@@ -1,76 +1,8 @@
 ﻿@model kaoshi.Models.es_exam
-
-@{
-   ViewBag.Title = "ChartDetail";
-}
-
 @section Styles{
    <style type="text/css">
-   .paper-info blockquote {
-      border: solid 1px #eee;
-      border-left: solid 3px #eee;
-   }
-
-   .test {
-      padding: 8px 2px;
-      background: #337AB7;
-      color: white;
-   }
-
-   .test-header {
-      padding: 8px 2px;
-      background: #C4CBCD;
-      margin-bottom: 5px;
-   }
-
-   .test-items {
-      margin-bottom: 10px;
-   }
-
-      .test-items .answer {
-         background: #f2dede;
-      }
-
-   .test-options {
-      padding: 8px 2px;
-      background: #F5F5F5;
-      border-bottom: solid 1px #ddd;
-   }
-
-      .test-options span, .test .input-group span {
-         cursor: pointer;
-         color: #333;
-      }
-
-   .test .fleft {
-      position: absolute;
-      display: block;
-      width: 25px;
-   }
-
-   .test span.content {
-      margin-left: 30px;
-      margin-right: 60px;
-      display: block;
-   }
-
-   .test span.fright {
-      position: absolute;
-      top: 0;
-      right: 10px;
-      display: block;
-   }
-
-   .test-container .control {
-      margin-bottom: 20px;
-   }
-
-   .panel-body {
-      padding: 5px;
-   }
-
-   .pie-box {
-         padding-top:5px;
+      .pie-box {
+         padding-top: 5px;
       }
 
       .pie {
@@ -97,101 +29,114 @@
       .level-3 .glyphicon {
          color: #69D2E7;
       }
-      .head{
-         height:40px;
-         line-height:40px;
-         font-size:14px;
-         font-weight:bold;
-         border-top:solid 1px #eee;
-         border-bottom:solid 1px #eee;
-         margin-top:10px;
-         margin-bottom:10px;
+
+      .head {
+         height: 40px;
+         line-height: 40px;
+         font-size: 14px;
+         font-weight: bold;
+         border-top: solid 1px #eee;
+         border-bottom: solid 1px #eee;
+         margin-top: 10px;
+         margin-bottom: 10px;
       }
-</style>   
+
+      .alert-chart {
+         background-color: #F5F5F5;
+         border-color: #F5F5F5;
+      }
+   </style>
+}
+@{
+   ViewBag.Title = "ChartDetail";
+   ViewBag.Controller = "考试";
+   ViewBag.Action = "统计";
 }
 
-<h2>考试统计</h2>
-
-<div class="panel panel-default">
-   <div class="panel-heading">
-      考试详情
-   </div>
-   <div class="panel-body">
-      <dl class="dl-horizontal">
-         <dt>参考学生</dt>
-         <dd>
-            @Html.DisplayFor(model => model.stulist)
-         </dd>
-
-         <dt>名称</dt>
-         <dd>
-            @Html.DisplayFor(model => model.name)
-         </dd>
-
-         <dt>开始时间</dt>
-         <dd>
-            @Html.DisplayFor(model => model.begin_time)
-         </dd>
-
-         <dt>结束时间</dt>
-         <dd>
-            @Html.DisplayFor(model => model.end_time)
-         </dd>
-      </dl>
-   </div>
+<div class="top-tools">
+   <div class="action"><span class="glyphicon glyphicon-map-marker"></span>考试统计</div>
+   @Html.ActionLink("返回列表", "Index")
 </div>
 
-<div class="panel panel-default" ng-app="myApp" ng-controller="Control">
-   <div class="panel-heading">
-      考试统计
-   </div>
-   <div class="panel-body">
-      <div>
-         <!-- Nav tabs -->
-         <ul class="nav nav-tabs" role="tablist">
-            <li role="presentation" class="active"><a href="#paper" aria-controls="paper" role="tab" data-toggle="tab">试卷分析</a></li>
-            <li role="presentation"><a href="#score" ng-click="getChart()" aria-controls="score" role="tab" data-toggle="tab">成绩统计</a></li>
-            <li role="presentation"><a href="#ranking" ng-click="getRank()" aria-controls="ranking" role="tab" data-toggle="tab">排名情况</a></li>
-         </ul>
+<div class="render-datas">
+   <div class="panel">
+      <div class="panel-heading">考试详情</div>
+      <div class="panel-body">
+         <dl class="dl-horizontal">
 
-         <!-- Tab panes -->
-         <div class="tab-content" style="padding-top: 10px;">
-            <div role="tabpanel" class="tab-pane active" id="paper">
-               <div class="row compose-box">
-                  <div class="clearfix">
-                     <div class="col-md-12 paper-views">
-                        <div class="panel panel-success" ng-repeat="c in composes">
-                           <div class="panel-heading clearfix">
-                              <div class="pull-left">
-                                 <span ng-bind="c.type"></span>.
-                                 <span ng-bind="c.typeName"></span>
-                                 <span>({{c.tests.length}}/{{c.number}})</span>
-                              </div>
-                              <div class="pull-right">
-                                 <span ng-bind="c.value"></span>x
-                                 <span ng-bind="c.number"></span>=
-                                 <span ng-bind="c.value*c.number"></span>
-                              </div>
-                           </div>
-                           <div class="panel-body">
-                              <div class="test-items" ng-repeat="t in c.tests">
-                                 @* 题目信息 *@
-                                 <div class="test clearfix" ng-cloak>
-                                    <div class="col-sm-12 title clearfix">
-                                       <span class="fleft" ng-cloak>({{$index+1}})</span>
-                                       <span class="content" ng-cloak>{{t.title}} (<span ng-bind="t.result"></span>)</span>
-                                    </div>
+            <dt>考试名称</dt>
+            <dd>
+               @Html.DisplayFor(model => model.name)
+            </dd>
+
+            <dt>参考人数</dt>
+            <dd>
+               @ViewBag.stuExamNum
+            </dd>
+
+            <dt>开始时间</dt>
+            <dd>
+               @Html.DisplayFor(model => model.begin_time)
+            </dd>
+
+            <dt>结束时间</dt>
+            <dd>
+               @Html.DisplayFor(model => model.end_time)
+            </dd>
+         </dl>
+      </div>
+   </div>
+   <div class="panel" ng-app="myApp" ng-controller="Control">
+      <div class="panel-heading">
+         考试统计
+      </div>
+      <div class="panel-body">
+         <div>
+            <!-- Nav tabs -->
+            <ul class="nav nav-tabs" role="tablist">
+               <li role="presentation" class="active"><a href="#paper" aria-controls="paper" role="tab" data-toggle="tab">试卷分析</a></li>
+               <li role="presentation"><a href="#score" ng-click="getChart()" aria-controls="score" role="tab" data-toggle="tab">成绩统计</a></li>
+               <li role="presentation"><a href="#ranking" ng-click="getRank()" aria-controls="ranking" role="tab" data-toggle="tab">排名情况</a></li>
+            </ul>
+            <!-- Tab panes -->
+            <div class="tab-content" style="padding-top: 10px;">
+               <div role="tabpanel" class="tab-pane active" id="paper">
+                  <div class="row compose-box">
+                     <div class="clearfix">
+                        <div class="col-md-12 paper-views">
+                           <div class="panel" ng-repeat="c in composes">
+                              <div class="panel-heading clearfix">
+                                 <div class="pull-left">
+                                    <span ng-bind="c.type"></span>.
+                                    <span ng-bind="c.typeName"></span>
+                                    <span>({{c.tests.length}}/{{c.number}})</span>
                                  </div>
-                                 @* 题目选项 *@
-                                 <div class="test-options clearfix" ng-class="{'answer':(t.result.indexOf(o.abcd)>-1)}" ng-repeat="o in t.options">
-                                    <div class="col-sm-1" ng-bind="o.abcd"></div>
-                                    <div class="col-sm-10" ng-cloak>
-                                       <span ng-bind="o.content"></span>
-                                    </div>
-                                    <div class="col-sm-1"><span ng-if="t.result.indexOf(o.abcd)>-1" class="glyphicon glyphicon-ok"></span></div>
+                                 <div class="pull-right">
+                                    <span ng-bind="c.value"></span>x
+                                    <span ng-bind="c.number"></span>=
+                                    <span ng-bind="c.value*c.number"></span>
                                  </div>
-                                 <div class="alert alert-info">
-                                    正确率: {{t.ok_count/(t.ok_count + t.no_count) * 100 | parseNAN}}%
+                              </div>
+                              <div class="panel-body">
+                                 <div class="test-items" ng-repeat="t in c.tests">
+                                    @* 题目信息 *@
+                                    <div class="test clearfix" ng-cloak>
+                                       <div class="col-sm-12 title clearfix">
+                                          <span class="fleft" ng-cloak>({{$index+1}})</span>
+                                          <span class="content" ng-cloak>{{t.title}} (<span ng-bind="t.result"></span>)</span>
+                                       </div>
+                                    </div>
+                                    @* 题目选项 *@
+                                    <div class="test-options clearfix" ng-class="{'answer':(t.result.indexOf(o.abcd)>-1)}" ng-repeat="o in t.options">
+                                       <div class="col-sm-11" ng-cloak>
+                                          <span class="abcd" ng-bind="o.abcd"></span>
+                                          <span ng-bind="o.content"></span>
+                                       </div>
+                                       <div class="col-sm-1"><span ng-if="t.result.indexOf(o.abcd)>-1" class="glyphicon glyphicon-ok"></span></div>
+                                    </div>
+                                    <div class="alert alert-chart">
+                                       正确率: {{t.ok_count/(t.ok_count + t.no_count) * 100 | parseNAN}}%
+                                    </div>
                                  </div>
                               </div>
                            </div>
@@ -199,29 +144,31 @@
                      </div>
                   </div>
                </div>
-            </div>
-            <div role="tabpanel" class="tab-pane" id="score">
-               <div class="pie-box clearfix">
-                  <div class="pie">
-                     <canvas id="pie" width='100' height='100' />
-                  </div>
-                  <div class="info">
-                     <div ng-repeat="c in chart" class="level-{{$index+1}}">
-                        <span class="glyphicon glyphicon-minus"></span>
-                        <span>{{c.label}}({{c.value}}人/{{c.value/e.chart.length*100|number:'1'}}%)</span>
+               <div role="tabpanel" class="tab-pane" id="score">
+                  <div class="pie-box clearfix">
+                     <div class="pie">
+                        <canvas id="pie" width='100' height='100' />
+                     </div>
+                     <div class="info">
+                        <div ng-repeat="c in chart" class="clearfix level-{{$index+1}}">
+                           <div class="pull-left"><span class="glyphicon glyphicon-minus"></span></div>
+                           <div style="line-height: 26px;margin-left: 10px;float:left;">
+                              <span>{{c.label}}({{c.value}}人/{{c.value/stuCounts*100|number:'1'}}%)</span>
+                           </div>
+                        </div>
+                     </div>
+                     <div style="float:left;margin-left:50px; line-height:30px;">
+                        <div>平均分：{{average}}(分)</div>
+                        <div>及格率：{{jige}}%</div>
+                        <div>缺考率：@((decimal)(ViewBag.stuNum - ViewBag.stuExamNum) / (decimal)ViewBag.stuNum * 100)%</div>
                      </div>
                   </div>
-                  <div class="clearfix">
-                     <div>平均分{{average}}(分)</div>
-                     <div>及格率{{jige}}%</div>
+                  <div class="chart-bar">
+
                   </div>
                </div>
-               <div class="chart-bar">
-
-               </div>
-            </div>
-            <div role="tabpanel" class="tab-pane" id="ranking">
-                  <table class="table table-bordered">
+               <div role="tabpanel" class="tab-pane" id="ranking">
+                  <table class="table">
                      <thead>
                         <tr>
                            <th>排名</th>
@@ -239,12 +186,12 @@
                         </tr>
                      </tbody>
                   </table>
+               </div>
             </div>
          </div>
       </div>
    </div>
 </div>
-
 @section Scripts{
    <script src="~/Scripts/angular.min.js"></script>
    <script src="~/Scripts/Chart.min.js"></script>
@@ -289,6 +236,7 @@
                   // responsive: true
                }
                $http.get('/admin/exam/GetStuExmaInfo?eid=' + @Model.id).success(function (res) {
+                  $scope.stuCounts = res.exams.length;
                   var totalScore = 0;
                   angular.forEach(res.exams, function (v, k) {
                      totalScore += v.score;

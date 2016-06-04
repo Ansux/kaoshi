@@ -1,0 +1,194 @@
+body {
+   background: #dedede;
+   font-family: '微软雅黑';
+}
+
+a {
+   cursor: pointer;
+}
+
+.panel-heading {
+   font-size: 18px;
+}
+
+.menu img {
+   width: 30px;
+   display: block;
+   float: left;
+   margin-top: -4px;
+   margin-right: 3px;
+}
+
+#stu_module {
+   background: #F4F4F4;
+   font-family: '微软雅黑';
+}
+
+   #stu_module .navbar-right {
+      margin-right: 0px;
+   }
+
+   #stu_module .menu li a {
+      padding-top: 20px;
+      font-size: 18px;
+      padding-bottom: 20px;
+   }
+
+   #stu_module .navbar-collapse {
+   }
+
+   #stu_module .navbar-right .dropdown > a {
+      padding-top: 20px;
+      padding-bottom: 20px;
+   }
+
+   #stu_module .btn-group {
+      margin-top: 12px;
+   }
+
+      #stu_module .btn-group button {
+         padding-left: 20px;
+         padding-right: 20px;
+      }
+
+.account .form-group {
+   position: relative;
+}
+
+   .account .form-group input {
+      padding: 6px 30px;
+      height: 38px;
+   }
+
+   .account .form-group label {
+      position: absolute;
+      left: 10px;
+      top: 10px;
+      color: #ccc;
+   }
+
+@media (min-width: 768px) {
+   .account .modal-dialog {
+      width: 500px;
+      margin: 30px auto;
+   }
+}
+
+.account .modal-footer a.link {
+   float: left;
+}
+
+.account .modal-body {
+   position: relative;
+   padding: 20px 30px;
+}
+
+.render-body {
+   margin-top: 100px;
+}
+
+footer {
+   margin-top: 20px;
+   padding: 10px 0;
+   font-family: '微软雅黑';
+   color: #666;
+}
+
+.test-items {
+   margin-bottom: 20px;
+}
+
+   .test-items .radio {
+      margin-bottom: 0px;
+   }
+
+.t-list .ok {
+   background-color: forestgreen;
+   color: white;
+}
+
+.t-list a {
+   display: inline-block;
+   margin-bottom: 5px;
+   margin-right: 5px;
+   padding: 3px 10px;
+   background: #ccc;
+   color: #333;
+   text-decoration: none;
+}
+
+#card {
+}
+
+.exam-info {
+   background: #fff;
+   border-radius: 5px;
+   padding: 20px;
+   margin-bottom: 20px;
+   color: #666;
+}
+
+   .exam-info .name {
+      font-size: 18px;
+      font-weight: bold;
+      margin-bottom: 10px;
+   }
+
+   .exam-info span {
+      margin-right: 20px;
+   }
+
+.right-info {
+   position: fixed;
+   z-index: 9999;
+}
+
+.test-items .test {
+   font-weight: bold;
+}
+
+.test-options {
+   padding-left: 5px;
+}
+
+.right-info .section {
+   background: #fff;
+   border-radius: 3px;
+   margin-bottom: 20px;
+}
+
+.right-info .title {
+   border-bottom: solid 1px #eee;
+   font-size: 15px;
+   line-height: 30px;
+   padding-left: 10px;
+   font-weight: bold;
+   text-align: left;
+}
+
+.right-info .wrap {
+   padding: 10px;
+}
+
+.right-info .time .wrap {
+   text-align: center;
+}
+
+.right-info .submit-btn {
+   margin-top: 10px;
+}
+
+   .right-info .submit-btn button {
+      padding-left: 20px;
+      padding-right: 20px;
+   }
+
+.t-list i {
+   font-style: normal;
+}
+
+@media (max-width: 992px) {
+   .right-info {
+      position: static;
+   }
+}

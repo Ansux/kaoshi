@@ -4,8 +4,6 @@
     ViewBag.Title = "Details";
 }
 
-<h3>考试详情</h3>
-
 @section Styles{
    <style>
       .test-items {
@@ -38,7 +36,7 @@
 }
 
 <div class="panel panel-default">
-   <div class="panel-heading">结果预览</div>
+   <div class="panel-heading">考试详情</div>
    <div class="panel-body">
       <dl class="dl-horizontal">
          <dt>考卷</dt>
@@ -72,10 +70,10 @@
    <div class="panel-body">
       <div class="row" ng-app="myApp" ng-controller="TestContrl">
          <div class="col-md-12">
-            <div class="panel panel-success" ng-repeat="c in composes">
+            <div class="panel" ng-repeat="c in composes">
                <div class="panel-heading clearfix">
-                  <div class="pull-left">
-                     <span ng-bind="c.type"></span>.
+                  <div class="pull-left" style="font-weight:bold;font-size:16px;">
+                     <span ng-bind="$index+1"></span>.
                      <span ng-bind="c.typeName"></span>
                      <span>({{c.tests.length}}/{{c.number}})</span>
                   </div>
@@ -116,11 +114,6 @@
    </div>
 </div>
 
-<p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.id }) |
-    @Html.ActionLink("Back to List", "Index")
-</p>
-
 @section Scripts{
    <script src="~/Scripts/angular.min.js"></script>
    <script>
@@ -149,12 +142,10 @@
                if(userOption==result){
                   return {
                      "color" : "#468847",
-                     "background-color" : "#dff0d8",
                   }
                }else{
                   return {
                      "color" : "#b94a48",
-                     "background-color" : "#f2dede",
                   }
                }
             }

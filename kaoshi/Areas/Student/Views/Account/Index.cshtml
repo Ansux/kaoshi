@@ -5,8 +5,6 @@
    var sno = int.Parse(Session["Sno"].ToString());
 }
 
-<h2>学生首页</h2>
-
 <div class="panel panel-default">
    <div class="panel-heading">考试安排</div>
    <div class="panel-body">
@@ -19,12 +17,14 @@
          }
          else
          {
-            <tr>
-               <th>名称</th>
-               <th>科目</th>
-               <th>考试时间</th>
-               <th>状态</th>
-            </tr>
+            <thead>
+               <tr>
+                  <th>名称</th>
+                  <th>科目</th>
+                  <th>考试时间</th>
+                  <th>状态</th>
+               </tr>
+            </thead>
             foreach (var item in Model)
             {
                <tr>
@@ -75,12 +75,13 @@
    <div class="panel-heading">最新公告</div>
    <div class="panel-body">
       <table class="table">
-         <tr>
-            <th>标题</th>
-            <th>摘要</th>
-            <th>发布时间</th>
-         </tr>
-
+         <thead>
+            <tr>
+               <th>标题</th>
+               <th>摘要</th>
+               <th>发布时间</th>
+            </tr>
+         </thead>
          @foreach (var item in ViewData["notices"] as List<kaoshi.Models.es_notice>)
          {
             <tr>
@@ -88,7 +89,7 @@
                   <a href="/student/account/notice/@item.id">@item.title</a>
                </td>
                <td>
-                  @(item.content.Substring(0,12)+"...")
+                  @(item.content.Substring(0, 12) + "...")
                </td>
                <td>
                   @Html.DisplayFor(modelItem => item.create_at)

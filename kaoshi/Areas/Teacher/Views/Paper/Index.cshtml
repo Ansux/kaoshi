@@ -2,62 +2,66 @@
 
 @{
    ViewBag.Title = "Index";
+   ViewBag.Controller = "试卷";
+   ViewBag.Action = "列表";
 }
 
-<h2>试卷管理</h2>
-
-<p>
+<div class="top-tools">
+   <div class="action"><span class="glyphicon glyphicon-map-marker"></span>试卷列表</div>
    @Html.ActionLink("新建试卷", "Create")
-</p>
+</div>
 
-<table class="table">
-   <tr>
-      <th>科目</th>
-      <th>名称</th>
-      <th>A/B卷</th>
-      <th>考试时长</th>
-      <th>总分</th>
-      <th>操作</th>
-   </tr>
+<div class="render-datas">
+   <table class="table">
+      <thead>
+         <tr>
+            <th>科目</th>
+            <th>名称</th>
+            <th>A/B卷</th>
+            <th>考试时长</th>
+            <th>总分</th>
+            <th>操作</th>
+         </tr>
+      </thead>
+      @foreach (var item in Model)
+      {
+         <tr>
+            <td>
+               @Html.DisplayFor(modelItem => item.es_subject.name)
+            </td>
+            <td>
+               @Html.DisplayFor(modelItem => item.name)
+            </td>
+            <td>
+               @Html.DisplayFor(modelItem => item.ab_paging)
+            </td>
+            <td>
+               @Html.DisplayFor(modelItem => item.test_time)
+            </td>
+            <td>
+               @Html.DisplayFor(modelItem => item.total_points)
+            </td>
+            <td>
+               @if (item.status == 1)
+            {
+                  @Html.ActionLink("开始组卷", "Compose", new { id = item.id })
+               }
+               else if (item.status == 2)
+               {
+                  @Html.ActionLink("手选", "SelectTopic", new { id = item.id })
+                  <span>/</span>
+                  @Html.ActionLink("机选", "MachineSelectTopic", new { id = item.id })
+               }
+               else if (item.status == 3)
+               {
+                  @Html.ActionLink("查看试卷", "Details", new { id = item.id })
+               }
+               |
+               @Html.ActionLink("编辑", "Edit", new { id = item.id }) |
+               @Html.ActionLink("删除", "Delete", new { id = item.id })
+            </td>
+         </tr>
+      }
 
-   @foreach (var item in Model)
-   {
-      <tr>
-         <td>
-            @Html.DisplayFor(modelItem => item.es_subject.name)
-         </td>
-         <td>
-            @Html.DisplayFor(modelItem => item.name)
-         </td>
-         <td>
-            @Html.DisplayFor(modelItem => item.ab_paging)
-         </td>
-         <td>
-            @Html.DisplayFor(modelItem => item.test_time)
-         </td>
-         <td>
-            @Html.DisplayFor(modelItem => item.total_points)
-         </td>
-         <td>
-            @if (item.status == 1)
-            {
-               @Html.ActionLink("开始组卷", "Compose", new { id = item.id })
-            }
-            else if (item.status == 2)
-            {
-               @Html.ActionLink("手选", "SelectTopic", new { id = item.id })
-               <span>/</span>
-               @Html.ActionLink("机选", "MachineSelectTopic", new { id = item.id })
-            }
-            else if (item.status == 3)
-            {
-               @Html.ActionLink("查看试卷", "Details", new { id = item.id })
-            }
-            |
-            @Html.ActionLink("编辑", "Edit", new { id = item.id }) |
-            @Html.ActionLink("删除", "Delete", new { id = item.id })
-         </td>
-      </tr>
-   }
-
-</table>
+   </table>
+</div>

@@ -10,6 +10,7 @@ using kaoshi.Models;
 
 namespace kaoshi.Areas.Admin.Controllers
 {
+   [Filters.AdminLoginAuthorize]
    public class NoticeController : Controller
    {
       private WebContext db = new WebContext();

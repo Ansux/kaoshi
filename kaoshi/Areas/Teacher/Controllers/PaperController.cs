@@ -10,7 +10,7 @@ using kaoshi.Models;
 
 namespace kaoshi.Areas.Teacher.Controllers
 {
-   // [Filters.TeacherLoginAuthorize]
+   [Filters.TeacherLoginAuthorize]
    public class PaperController : Controller
    {
       private WebContext db = new WebContext();

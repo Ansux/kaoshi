@@ -1,0 +1,110 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+   <meta charset="utf-8" />
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>@ViewBag.Title - My ASP.NET Application</title>
+   <link rel="stylesheet" href="~/Content/bootstrap.min.css">
+   <link rel="stylesheet" href="~/Content/admin.css">
+   <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+   <script src="~/Scripts/bootstrap.min.js"></script>
+   <script src="~/Scripts/modernizr-2.6.2.js"></script>
+   @RenderSection("Styles", false)
+</head>
+<body>
+   <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container-fluid">
+         <div class="navbar-header">
+            <button class="navbar-toggle collapsed" data-toggle="collapse" data-target="#sidebar">
+               <span class="sr-only">Toggle navigation</span>
+               <span class="icon-bar"></span>
+               <span class="icon-bar"></span>
+               <span class="icon-bar"></span>
+            </button>
+            <a href="###" class="navbar-brand">
+               <span>SW</span>Admin
+            </a>
+            <div class="dropdown user-menu">
+               <div class="pull-right">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                     <span class="glyphicon glyphicon-user"></span> Ansux
+                     <span class="caret"></span>
+                  </a>
+                  <ul class="dropdown-menu">
+                     <li><a href="#">Action</a></li>
+                     <li><a href="#">Another action</a></li>
+                     <li><a href="#">Something else here</a></li>
+                     <li role="separator" class="divider"></li>
+                     <li><a href="#">Separated link</a></li>
+                  </ul>
+               </div>
+            </div>
+         </div>
+      </div>
+   </nav>
+   <section id="sidebar" class="sidebar">
+      <form class="search">
+         <div class="form-group">
+            <input type="text" placeholder="输入关键字.." class="form-control">
+         </div>
+      </form>
+      <div class="nav menu">
+         <ul>
+            <li class="active">
+               <a class="parent" href="#collapseExample" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                  <i class="glyphicon glyphicon-th-list"></i>人员管理
+                  <span class="glyphicon glyphicon-plus"></span>
+               </a>
+               <ul class="collapse" id="collapseExample">
+                  <li><a href=""><i class="glyphicon glyphicon-share-alt"></i>学生管理</a></li>
+                  <li><a href=""><i class="glyphicon glyphicon-share-alt"></i>教师管理</a></li>
+                  <li><a href=""><i class="glyphicon glyphicon-share-alt"></i>班级管理</a></li>
+               </ul>
+            </li>
+            <li>
+               <a href=""><i class="glyphicon glyphicon-th-list"></i>考试管理</a>
+            </li>
+            <li>
+               <a href=""><i class="glyphicon glyphicon-th-list"></i>科目管理</a>
+            </li>
+            <li>
+               <a href=""><i class="glyphicon glyphicon-th-list"></i>公告管理</a>
+            </li>
+            <li>
+               <a href=""><i class="glyphicon glyphicon-th-list"></i>统计中心</a>
+            </li>
+         </ul>
+      </div>
+      <div class="divider"></div>
+      <div class="signout">
+         <a href=""><span class="glyphicon glyphicon-log-out"></span> 退出登录</a>
+      </div>
+      <div class="copyright">
+         @ ansux.win
+      </div>
+   </section>
+   <section class="body-wrap">
+      <ol class="breadcrumb">
+         <li><a href="#">首页</a></li>
+         <li><a href="#">人员管理</a></li>
+         <li class="active">列表</li>
+      </ol>
+      <div class="render-body">
+         @RenderBody()
+      </div>
+   </section>
+   <script>
+        $('.collapse').on('hide.bs.collapse', function () {
+            $($(this).prev().children()).removeClass("glyphicon-minus");
+            $($(this).prev().children()).addClass("glyphicon-plus");
+
+        })
+        $('.collapse').on('show.bs.collapse', function () {
+            $($(this).prev().children()).removeClass("glyphicon-plus");
+            $($(this).prev().children()).addClass("glyphicon-minus");
+
+        })
+   </script>
+   @RenderSection("Scripts", false)
+</body>
+</html>

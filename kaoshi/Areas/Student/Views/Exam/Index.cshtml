@@ -5,74 +5,77 @@
    var sno = int.Parse(Session["Sno"].ToString());
 }
 
-<h2>考试安排</h2>
-<hr/>
-
-@if (Model.Count() == 0)
-{
-   <div class="alert alert-danger">
-      <strong>提示：</strong>
-      暂无最近的考试安排。
-   </div>
-}
-else
-{
-   <table class="table">
-      <tr>
-         <th>名称</th>
-         <th>科目</th>
-         <th>时长</th>
-         <th>总分</th>
-         <th>考试时间</th>
-         <th>状态</th>
-      </tr>
-
-      @foreach (var item in Model)
+<div class="panel panel-default">
+   <div class="panel-heading">考试安排</div>
+   <div class="panel-body">
+      @if (Model.Count() == 0)
       {
-         <tr>
-            <td>
-               @Html.DisplayFor(modelItem => item.name)/
-               (@Html.DisplayFor(modelItem => item.es_paper.ab_paging))卷
-            </td>
-            <td>
-               @Html.DisplayFor(modelItem => item.es_paper.es_subject.name)
-            </td>
-            <td>
-               @Html.DisplayFor(modelItem => item.es_paper.test_time)
-            </td>
-            <td>
-               @Html.DisplayFor(modelItem => item.es_paper.total_points)
-            </td>
-            <td>
-               @Html.Raw(string.Format("{0:g}", item.begin_time))-@Html.Raw(string.Format("{0:t}", item.end_time))
-            </td>
-            <td>
-               @if (item.begin_time > DateTime.Now)
+         <div class="alert">
+            <strong>提示：</strong>
+            暂无最近的考试安排。
+         </div>
+      }
+      else
+      {
+         <table class="table">
+            <thead>
+               <tr>
+                  <th>名称</th>
+                  <th>科目</th>
+                  <th>时长</th>
+                  <th>总分</th>
+                  <th>考试时间</th>
+                  <th>状态</th>
+               </tr>
+            </thead>
+            @foreach (var item in Model)
+            {
+               <tr>
+                  <td>
+                     @Html.DisplayFor(modelItem => item.name)/
+                     (@Html.DisplayFor(modelItem => item.es_paper.ab_paging))卷
+                  </td>
+                  <td>
+                     @Html.DisplayFor(modelItem => item.es_paper.es_subject.name)
+                  </td>
+                  <td>
+                     @Html.DisplayFor(modelItem => item.es_paper.test_time)
+                  </td>
+                  <td>
+                     @Html.DisplayFor(modelItem => item.es_paper.total_points)
+                  </td>
+                  <td>
+                     @Html.Raw(string.Format("{0:g}", item.begin_time))-@Html.Raw(string.Format("{0:t}", item.end_time))
+                  </td>
+                  <td>
+                     @if (item.begin_time > DateTime.Now)
                {
-                  @Html.Raw("待考中.");
+                        @Html.Raw("待考中.");
                }
                else if (item.end_time < DateTime.Now)
                {
-                  @Html.Raw("已结束");
+                        @Html.Raw("已结束");
                }
                else
                {
                   var se = item.es_stu_exam.FirstOrDefault(e => e.student == sno);
                   if (se != null && se.score != null)
                   {
-                     @Html.Raw("您已提交考卷");
+                           @Html.Raw("您已提交考卷");
                   }
                   else if (se != null && se.score == null)
                   {
-                     @Html.Raw("<a href='/student/exam/testing/" + @item.id + "'>继续答题</a>");
+                           @Html.Raw("<a href='/student/exam/testing/" + @item.id + "'>继续答题</a>");
                   }
                   else
                   {
-                     @Html.Raw("<a href='/student/exam/instructions/" + @item.id + "'>进入答题</a>");
+                           @Html.Raw("<a href='/student/exam/instructions/" + @item.id + "'>进入答题</a>");
                   }
                }
-            </td>
-         </tr>
+                  </td>
+               </tr>
+            }
+         </table>
       }
-   </table>
-}
+   </div>
+</div>

@@ -2,33 +2,37 @@
 
 @{
    ViewBag.Title = "Index";
+   ViewBag.Controller = "科目";
+   ViewBag.Action = "列表";
 }
 
-<h2>Index</h2>
+<div class="top-tools">
+   <div class="action"><span class="glyphicon glyphicon-map-marker"></span>科目列表</div>
+   @Html.ActionLink("添加科目", "Create")
+</div>
 
-<p>
-   @Html.ActionLink("Create New", "Create")
-</p>
-<table class="table">
-   <tr>
-      <th>
-         @Html.DisplayNameFor(model => model.name)
-      </th>
-      <th></th>
-   </tr>
-
-   @foreach (var item in Model)
-   {
-      <tr>
-         <td>
-            @Html.DisplayFor(modelItem => item.name)
-         </td>
-         <td>
-            @Html.ActionLink("编辑", "Edit", new { id = item.id }) |
-            @Html.ActionLink("详情", "Details", new { id = item.id }) |
-            @Html.ActionLink("删除", "Delete", new { id = item.id })
-         </td>
-      </tr>
-   }
-
-</table>
+<div class="render-datas">
+   <table class="table">
+      <thead>
+         <tr>
+            <th>
+               @Html.DisplayNameFor(model => model.name)
+            </th>
+            <th>操作</th>
+         </tr>
+      </thead>
+      @foreach (var item in Model)
+      {
+         <tr>
+            <td>
+               @Html.DisplayFor(modelItem => item.name)
+            </td>
+            <td>
+               @Html.ActionLink("编辑", "Edit", new { id = item.id }, new { @class="btn btn-warning btn-xs"})
+               @Html.ActionLink("详情", "Details", new { id = item.id }, new { @class = "btn btn-primary btn-xs" })
+               @Html.ActionLink("删除", "Delete", new { id = item.id }, new { @class = "btn btn-danger btn-xs" })
+            </td>
+         </tr>
+      }
+   </table>
+</div>

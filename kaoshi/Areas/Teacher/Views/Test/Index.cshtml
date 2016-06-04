@@ -2,19 +2,104 @@
 
 @{
    ViewBag.Title = "Index";
+   ViewBag.Controller = "题库";
+   ViewBag.Action = "列表";
 }
 
 @section Styles{
    <style>
-      .analyze{
-         padding:10px;
-         background: #eee
+      .analyze {
+         padding: 10px;
+         background: #eee;
       }
-      .page-count{
+
+      .page-count {
          float: left;
-          margin: 20px;
-          line-height: 30px;
-          color: #666;
+         margin: 20px;
+         line-height: 30px;
+         color: #666;
+      }
+
+      .control {
+         margin-bottom: 20px;
+      }
+
+         .control .input-group {
+            float: left;
+            width: 200px;
+            margin-right: 20px;
+         }
+
+      .test-header {
+         padding: 8px 2px;
+         background: #C4CBCD;
+         margin-bottom: 5px;
+      }
+
+      .test {
+         padding: 8px 2px;
+         background: #EEEEEE;
+         color: #333;
+         font-size: 15px;
+      }
+
+      .test-options {
+         padding: 8px 2px;
+         background: #F5F5F5;
+         border-bottom: solid 1px #ddd;
+      }
+
+      .test-items {
+         margin-bottom: 10px;
+      }
+
+         .test-items .answer {
+            color: rgb(70, 136, 71);
+            background-color: rgb(223, 240, 216);
+         }
+
+      .test-options .abcd {
+      }
+
+      .btn-sm {
+         line-height: 1;
+         padding: 2px 3px;
+      }
+
+      .test-options .contrl {
+         display: none;
+      }
+
+      .test-options span, .test .input-group span {
+         cursor: pointer;
+      }
+
+      .btn-ss {
+         border: none;
+         background: none;
+      }
+
+      .test-options select.form-control {
+         padding: 6px 3px;
+         text-align: center;
+      }
+
+      .test .fleft {
+         position: absolute;
+         display: block;
+         width: 25px;
+         float: left;
+      }
+
+      .test span.fright {
+         margin-left: 30px;
+         width: 90%;
+         display: block;
+      }
+
+      .test input.fright {
+         width: 90%;
+         margin-left: 30px;
       }
    </style>
    <script src="~/Scripts/angular.min.js"></script>
@@ -209,7 +294,7 @@
          // 延迟加载数据
          $timeout(function () {
             $scope.getList()
-         }, 1000);         
+         }, 1000);
       }])
       .directive('maxLength', function () {
          return {
@@ -278,86 +363,9 @@
       })
    </script>
 }
-<h2>题库管理</h2>
-<hr />
-<style type="text/css">
-   .control {
-     margin-bottom: 20px;
-   }
 
-     .control .input-group {
-       float: left;
-       width: 200px;
-       margin-right: 20px;
-     }
-
-   .test-header {
-     padding: 8px 2px;
-     background: #C4CBCD;
-     margin-bottom: 5px;
-   }
-
-   .test {
-     padding: 8px 2px;
-     background: #337AB7;
-     color: white;
-   }
-
-   .test-options {
-     padding: 8px 2px;
-     background: #F5F5F5;
-     border-bottom: solid 1px #ddd;
-   }
-
-   .test-items {
-     margin-bottom: 10px;
-   }
-
-     .test-items .answer {
-       background: #f2dede;
-     }
-
-   .btn-sm {
-     line-height: 1;
-     padding: 2px 3px;
-   }
-
-   .test-options .contrl {
-     display: none;
-   }
-
-   .test-options span, .test .input-group span {
-     cursor: pointer;
-     color:#333;
-   }
-
-   .btn-ss {
-     border: none;
-     background: none;
-   }
-
-   .test-options select.form-control {
-     padding: 6px 3px;
-     text-align: center;
-   }
-   .test .fleft{
-     position:absolute;
-     display:block;
-     width:25px;
-     float:left;
-   }
-   .test span.fright{
-     margin-left:30px;
-     width:90%;
-     display:block;
-   }
-   .test input.fright{
-     width:90%;
-     margin-left:30px;
-   }
-</style>
-<div class="test-body" ng-app="myApp">
-   <div ng-controller="control">
+<div class="render-datas">
+   <div class="test-body" ng-app="myApp" ng-controller="control">
       <div class="control clearfix">
          <div class="input-group">
             <span class="input-group-addon" id="sizing-addon2">科目</span>
@@ -377,7 +385,7 @@
             <button class="btn btn-danger" data-toggle="modal" data-target="#testModal" ng-disabled="test.subject=='-1'||test.type=='-1'">添加题目</button>
          </div>
          <div class="pull-right">
-            <input type="text" placeholder="输入关键字..." class="form-control" ng-model="kw" ng-change="search(kw)"/>
+            <input type="text" placeholder="输入关键字..." class="form-control" ng-model="kw" ng-change="search(kw)" />
          </div>
          <div class="modal fade" id="testModal" data-backdrop="false">
             <div class="modal-dialog modal-lg">
@@ -432,9 +440,9 @@
                   <button class="btn btn-warning btn-sm" ng-class="{'active':t.editFlag}" ng-click="t.editFlag=!t.editFlag">编辑</button>
                   <button class="btn btn-danger btn-sm" ng-click="testDel(t.id,$index)">删除</button>
                   <button class="btn btn-primary btn-sm"
-                          ng-class="{'active':t.addOptionFlag}"
-                          ng-if="(t.type==2&&t.options.length<2)||(t.type==1&&t.options.length<4)"
-                          ng-cloak ng-click="t.addOptionFlag=!t.addOptionFlag">
+                           ng-class="{'active':t.addOptionFlag}"
+                           ng-if="(t.type==2&&t.options.length<2)||(t.type==1&&t.options.length<4)"
+                           ng-cloak ng-click="t.addOptionFlag=!t.addOptionFlag">
                      添加选项
                   </button>
                </div>
@@ -442,7 +450,7 @@
 
             @* 题目选项 *@
             <div class="test-options clearfix" ng-class="{'answer':t.result.indexOf(o.abcd)>-1}" ng-repeat="o in t.options">
-               <div class="col-sm-1" ng-bind="o.abcd"></div>
+               <div ng-bind="o.abcd" class="col-sm-1"></div>
                <div class="col-sm-7" ng-cloak>
                   <span ng-if="!o.editFlag" ng-bind="o.content"></span>
                   <div class="input-group" ng-if="o.editFlag">
@@ -457,12 +465,6 @@
                   <button class="btn btn-danger btn-sm" ng-click="optionDel(o.id, t.options, $index)">删除</button>
                </div>
             </div>
-            @* 题目解析 *@
-            <div class="analyze">解析：
-               <span ng-if="!t.editFlag" ng-bind="t.analyze"></span>
-               <textarea ng-if="t.editFlag" ng-cloak ng-model="t.analyze" value="{{t.analyze}}" class="form-control"></textarea>
-            </div>
-
             @* 选项表单 *@
             <div class="test-options clearfix" ng-if="t.addOptionFlag||(t.type==2&&t.options.length<2)||(t.type==1&&t.options.length<4)" ng-cloak>
                <div class="col-sm-1">
@@ -482,6 +484,13 @@
                      <span class="input-group-addon" ng-click="t.addOptionFlag=false">取消</span>
                   </div>
                </div>
+            </div>
+
+            @* 题目解析 *@
+            <div class="analyze">
+               解析：
+               <span ng-if="!t.editFlag" ng-bind="t.analyze"></span>
+               <textarea ng-if="t.editFlag" ng-cloak ng-model="t.analyze" value="{{t.analyze}}" class="form-control"></textarea>
             </div>
          </div>
       </div>

@@ -1,0 +1,74 @@
+
+body{
+    padding-top: 80px;
+}
+#login_nav{
+    background: #30a5ff;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25), inset 0 -1px 0 rgba(0, 0, 0, 0.1);
+}
+#login_nav a{
+    color: #fff;
+}
+#login_nav a.navbar-brand{
+    font-size: 20px;
+    font-weight: bold;
+}
+#login_nav .navbar-nav>li>a{
+    font-size: 12px;
+    background: none;
+}
+.login-container,.register-container{
+    width: 380px;
+    margin: 60px auto;
+    background: #f9f9f9;
+    border: 1px solid #D5D5D5;
+    border-radius: 5px;
+    box-shadow: 0px 0px 2px #dadada, inset 0px -3px 0px #e6e6e6;
+}
+
+.login-container .content,.register-container .content{
+    padding: 16px 28px 23px;
+
+}
+
+.login-container .form-group{
+    margin-bottom: 10px;
+}
+
+.login-submit{
+    margin-top: 20px;
+}
+
+.form-horizontal .form-group {
+    margin-right: 0px;
+    margin-left: 0px;
+}
+
+.login-submit .submit{
+    text-align: right;
+}
+
+.login-container .form-group input[type=text],.login-container .form-group input[type=password]{
+    height: 40px;
+}
+
+.register-container .form-group input[type=text],.register-container .form-group input[type=password]{
+    height: 40px;
+    margin-bottom: 10px;
+}
+.register-container .submit{
+    text-align: right;
+}
+
+.register-container .code{
+    margin-bottom: 10px;
+}
+.register-container .code img{
+    display: block;
+    height: 36px;
+}
+
+.register-container .code .glyphicon{
+    font-size: 18px;
+    vertical-align: middle;
+}

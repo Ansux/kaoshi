@@ -1,46 +1,46 @@
 ﻿@model kaoshi.Models.es_notice
 
 @{
-    ViewBag.Title = "Create";
+   ViewBag.Title = "Create";
+   ViewBag.Controller = "公告";
+   ViewBag.Action = "发布";
 }
 
-<h2>Create</h2>
+<div class="top-tools">
+   <div class="action"><span class="glyphicon glyphicon-map-marker"></span>公告发布</div>
+   @Html.ActionLink("返回列表", "index")
+</div>
 
-
-@using (Html.BeginForm()) 
-{
-    @Html.AntiForgeryToken()
-    
-    <div class="form-horizontal">
-        <h4>es_notice</h4>
-        <hr />
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        <div class="form-group">
+<div class="render-datas">
+   @using (Html.BeginForm())
+   {
+      @Html.AntiForgeryToken()
+      <div class="form-horizontal">
+         <hr />
+         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+         <div class="form-group">
             @Html.LabelFor(model => model.title, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.title, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.title, "", new { @class = "text-danger" })
+               @Html.EditorFor(model => model.title, new { htmlAttributes = new { @class = "form-control" } })
+               @Html.ValidationMessageFor(model => model.title, "", new { @class = "text-danger" })
             </div>
-        </div>
+         </div>
 
-        <div class="form-group">
+         <div class="form-group">
             @Html.LabelFor(model => model.content, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.TextAreaFor(model => model.content, new {@class = "form-control", @rows="10"})
-                @Html.ValidationMessageFor(model => model.content, "", new { @class = "text-danger" })
+               @Html.TextAreaFor(model => model.content, new { @class = "form-control", @rows = "10" })
+               @Html.ValidationMessageFor(model => model.content, "", new { @class = "text-danger" })
             </div>
-        </div>
+         </div>
 
-        <div class="form-group">
+         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Create" class="btn btn-default" />
+               <input type="submit" value="立即发布" class="btn btn-default" />
             </div>
-        </div>
-    </div>
-}
-
-<div>
-    @Html.ActionLink("Back to List", "Index")
+         </div>
+      </div>
+   }
 </div>
 
 <script src="~/Scripts/jquery-1.10.2.min.js"></script>

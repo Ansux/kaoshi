@@ -18,7 +18,7 @@ namespace kaoshi.Areas.Student.Controllers
 
       public ActionResult Index()
       {
-         var exams = db.es_exam.Where(e=>e.end_time>DateTime.Now).ToList();
+         var exams = db.es_exam.Where(e => e.end_time > DateTime.Now).ToList();
 
          var notices = db.es_notice.Take(6);
          ViewData["notices"] = notices.ToList();
@@ -40,10 +40,15 @@ namespace kaoshi.Areas.Student.Controllers
          return View(es_student);
       }
 
+      public ActionResult Notices()
+      {
+         var notice = db.es_notice.ToList();
+         return View(notice);
+      }
+
       public ActionResult Notice(int? id)
       {
-         var notice = db.es_notice.Find(id);
-         return View(notice);
+         return View(db.es_notice.Find(id));
       }
 
       [AllowAnonymous]
@@ -87,7 +92,8 @@ namespace kaoshi.Areas.Student.Controllers
       {
          var id = int.Parse(Session["Sno"].ToString());
          var stu = db.es_student.Find(id);
-         try {
+         try
+         {
             db.Entry(stu).State = EntityState.Unchanged;
             db.Entry(stu).Property(e => e.real_name).IsModified = true;
             db.Entry(stu).Property(e => e.email).IsModified = true;
@@ -134,7 +140,7 @@ namespace kaoshi.Areas.Student.Controllers
       [AllowAnonymous]
       public ActionResult Signin()
       {
-         if(Session["Sno"] != null)
+         if (Session["Sno"] != null)
          {
             return RedirectToAction("Index");
          }
@@ -168,7 +174,7 @@ namespace kaoshi.Areas.Student.Controllers
 
             return RedirectToAction("Index");
          }
-         
+
          return View(stu);
       }
 

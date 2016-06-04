@@ -7,6 +7,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using kaoshi.Models;
+using kaoshi.Controllers;
 
 namespace kaoshi.Areas.Teacher.Controllers
 {
@@ -33,32 +34,11 @@ namespace kaoshi.Areas.Teacher.Controllers
          return View(es_teacher);
       }
 
-      public ActionResult Create()
+      [Filters.TeacherLoginAuthorize]
+      public ActionResult Edit()
       {
-         return View();
-      }
-
-      [HttpPost]
-      [ValidateAntiForgeryToken]
-      public ActionResult Create([Bind(Include = "id,login_id,login_pwd,real_name,sex,email,create_at,update_at")] es_teacher es_teacher)
-      {
-         if (ModelState.IsValid)
-         {
-            db.es_teacher.Add(es_teacher);
-            db.SaveChanges();
-            return RedirectToAction("Index");
-         }
-
-         return View(es_teacher);
-      }
-
-      public ActionResult Edit(int? id)
-      {
-         if (id == null)
-         {
-            return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-         }
-         es_teacher es_teacher = db.es_teacher.Find(id);
+         int tid = int.Parse(Session["Tid"].ToString());
+         es_teacher es_teacher = db.es_teacher.Find(tid);
          if (es_teacher == null)
          {
             return HttpNotFound();
@@ -66,17 +46,29 @@ namespace kaoshi.Areas.Teacher.Controllers
          return View(es_teacher);
       }
 
+      [Filters.TeacherLoginAuthorize]
       [HttpPost]
       [ValidateAntiForgeryToken]
-      public ActionResult Edit([Bind(Include = "id,login_id,login_pwd,real_name,sex,email,create_at,update_at")] es_teacher es_teacher)
+      public ActionResult Edit(int id,string login_pwd, string real_name, byte sex, string email)
       {
-         if (ModelState.IsValid)
+         int tid = int.Parse(Session["Tid"].ToString());
+         var teacher = db.es_teacher.Find(tid);
+         try
          {
-            db.Entry(es_teacher).State = EntityState.Modified;
+            teacher.real_name = real_name;
+            teacher.sex = sex;
+            teacher.email = email;
+            if (login_pwd != null)
+            {
+               teacher.login_pwd = login_pwd;
+            }
             db.SaveChanges();
             return RedirectToAction("Index");
          }
-         return View(es_teacher);
+         catch
+         {
+            return View(teacher);
+         }
       }
 
       public ActionResult Delete(int? id)
@@ -127,10 +119,12 @@ namespace kaoshi.Areas.Teacher.Controllers
       {
          if (ModelState.IsValid)
          {
-            var tobj = db.es_teacher.Where(t => t.login_id == teacher.login_id && t.login_pwd == teacher.login_pwd).FirstOrDefault();
+            var pwd = Tools.MD5(teacher.login_pwd);
+            var tobj = db.es_teacher.Where(t => t.login_id == teacher.login_id && t.login_pwd == pwd).FirstOrDefault();
             if (tobj != null)
             {
-               Session["Tid"] = tobj.login_id;
+               Session["Tid"] = tobj.id;
+               Session["TLoginId"] = tobj.login_id;
                Session["Tname"] = tobj.real_name;
             }
 

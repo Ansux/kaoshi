@@ -10,6 +10,7 @@ using kaoshi.Models;
 
 namespace kaoshi.Areas.Admin.Controllers
 {
+   [Filters.AdminLoginAuthorize]
    public class ExamController : Controller
    {
       private WebContext db = new WebContext();
@@ -142,6 +143,8 @@ namespace kaoshi.Areas.Admin.Controllers
          {
             return HttpNotFound();
          }
+         ViewBag.stuNum = db.es_student.Count();
+         ViewBag.stuExamNum = db.es_stu_exam.Where(e => e.exam == es_exam.id).Count();
          return View(es_exam);
       }
 

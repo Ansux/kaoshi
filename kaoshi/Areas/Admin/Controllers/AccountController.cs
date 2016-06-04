@@ -57,13 +57,10 @@ namespace kaoshi.Areas.Admin.Controllers
          return View(es_manager);
       }
 
-      public ActionResult Edit(int? id)
+      public ActionResult Edit()
       {
-         if (id == null)
-         {
-            return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-         }
-         es_manager es_manager = db.es_manager.Find(id);
+         var mid = int.Parse(Session["Mid"].ToString());
+         es_manager es_manager = db.es_manager.Find(mid);
          if (es_manager == null)
          {
             return HttpNotFound();
@@ -74,18 +71,27 @@ namespace kaoshi.Areas.Admin.Controllers
 
       [HttpPost]
       [ValidateAntiForgeryToken]
-      public ActionResult Edit([Bind(Include = "id,login_id,login_pwd,real_name,sex,email,role")] es_manager es_manager)
+      public ActionResult Edit(int id,string login_pwd, string real_name,byte sex, string email)
       {
-         if (ModelState.IsValid)
+         var es_manager = db.es_manager.Find(id);
+         try
          {
-            db.Entry(es_manager).State = EntityState.Modified;
+            es_manager.real_name = real_name;
+            es_manager.sex = sex;
+            es_manager.email = email;
+            if (login_pwd != null)
+            {
+               es_manager.login_pwd = Tools.MD5(login_pwd);
+            }
             es_manager.update_at = DateTime.Now;
 
             db.SaveChanges();
             return RedirectToAction("Index");
          }
-         ViewBag.role = new SelectList(db.es_role, "id", "name", es_manager.role);
-         return View(es_manager);
+         catch { 
+            ViewBag.role = new SelectList(db.es_role, "id", "name", es_manager.role);
+            return View(es_manager);
+         }
       }
 
       public ActionResult Delete(int? id)
@@ -156,7 +162,7 @@ namespace kaoshi.Areas.Admin.Controllers
                return Redirect(ReturnUrl);
             }
 
-            return RedirectToAction("Index");
+            return Redirect("/admin/exam");
          }
 
          return View(manager);

@@ -11,6 +11,7 @@ using kaoshi.Areas.Teacher.Models;
 
 namespace kaoshi.Areas.Teacher.Controllers
 {
+   [Filters.TeacherLoginAuthorize]
    public class PaperComposeController : Controller
    {
       private WebContext db = new WebContext();
@@ -185,7 +186,7 @@ namespace kaoshi.Areas.Teacher.Controllers
       }
 
       [HttpPost]
-      public JsonResult RemoveTest(int composeId,int testId)
+      public JsonResult RemoveTest(int composeId, int testId)
       {
          var compose = db.es_paper_compose.Find(composeId);
          var tests = compose.tests;
@@ -194,7 +195,7 @@ namespace kaoshi.Areas.Teacher.Controllers
 
          var composes = tests.Split(',').ToList();
 
-         for(var i = 0; i < composes.Count; i++)
+         for (var i = 0; i < composes.Count; i++)
          {
             if (composes[i] == testId.ToString())
             {

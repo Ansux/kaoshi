@@ -11,6 +11,7 @@ using kaoshi.Areas.Teacher.Models;
 
 namespace kaoshi.Areas.Teacher.Controllers
 {
+   [Filters.TeacherLoginAuthorize]
    public class TestController : Controller
    {
       private WebContext db = new WebContext();

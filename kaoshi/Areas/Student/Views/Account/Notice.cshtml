@@ -1,34 +1,30 @@
 ﻿@model kaoshi.Models.es_notice
 
 @{
-    ViewBag.Title = "Notice";
+   ViewBag.Title = "Notice";
 }
 
-<h2>Notice</h2>
+<div class="panel panel-default">
+   <div class="panel-heading">@Model.title</div>
+   <div class="panel-body">
+      <dl class="dl-horizontal">
 
-<div>
-    <h4>es_notice</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.title)
-        </dt>
+         <dt>
+            @Html.DisplayNameFor(model => model.create_at)
+         </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.title)
-        </dd>
+         <dd>
+            @Html.DisplayFor(model => model.create_at)
+         </dd>
 
-        <dt>
+         <dt>
             @Html.DisplayNameFor(model => model.content)
-        </dt>
+         </dt>
 
-        <dd>
+         <dd>
             @Html.DisplayFor(model => model.content)
-        </dd>
+         </dd>
 
-    </dl>
+      </dl>
+   </div>
 </div>
-<p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.id }) |
-    @Html.ActionLink("Back to List", "Index")
-</p>
