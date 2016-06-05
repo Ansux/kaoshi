@@ -29,7 +29,7 @@
                @Html.DisplayFor(modelItem => item.name)
             </td>
             <td>
-               @if (item.begin_time > DateTime.Now)
+            @if (item.begin_time > DateTime.Now)
             {
                   @Html.Raw("待考中");
             }

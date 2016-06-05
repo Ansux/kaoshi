@@ -144,7 +144,10 @@
          // 初始化选项卡
          $scope.test = {
             type: '-1',
-            subject: '-1'
+            subject: '-1',
+            options: [
+
+            ]
          };
 
          // 获取选项卡下拉值
@@ -194,10 +197,13 @@
             var test = {
                type: $scope.test.type,
                subject: $scope.test.subject,
-               title: $scope.test.title
+               title: $scope.test.title,
+               options: $scope.test.options
             };
             $http.post('test/create', test).success(function (res) {
-               res.options = [];
+               if (res.options == null) {
+                  res.options = [];
+               }
                $scope.tests.push(res);
                $('#testModal').modal('hide');
             })
@@ -250,6 +256,7 @@
                      var x = a['abcd']; var y = b['abcd'];
                      return ((x < y) ? -1 : ((x > y) ? 1 : 0));
                   });
+                  $(target).find('.form-control')[1].value = '';
                   $timeout(function () {
                      $('.test-options').hover(function () {
                         $(this).find('.contrl')[0].style.display = "block";
@@ -295,6 +302,8 @@
          $timeout(function () {
             $scope.getList()
          }, 1000);
+
+         // pager Angular的分页组件
       }])
       .directive('maxLength', function () {
          return {
@@ -326,7 +335,7 @@
                showNum: '=',
                page: '='
             },
-            template:'<nav class="clearfix">' +
+            template: '<nav class="clearfix">' +
                      '<ul class="pagination pagination-sm pull-left">' +
                      '<li ng-if="page!=1"><a ng-click="changePage(page-1)" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>' +
                      '<li ng-repeat="p in pages" ng-class="{\'active\':page==p}"><a ng-bind="p" ng-click="changePage(p)"></a></li>' +
@@ -404,6 +413,33 @@
                               <textarea class="form-control" name="title" ng-model='test.title' required></textarea>
                            </div>
                         </div>
+                        <hr/>
+                        <div ng-if="test.type==1" class="options-form">
+                           <div class="form-group">
+                              <label for="" class="col-sm-2 control-label">选项A</label>
+                              <div class="col-sm-10">
+                                 <textarea class="form-control" name="title" ng-model='test.options[0]' required></textarea>
+                              </div>
+                           </div>
+                           <div class="form-group">
+                              <label for="" class="col-sm-2 control-label">选项B</label>
+                              <div class="col-sm-10">
+                                 <textarea class="form-control" name="title" ng-model='test.options[1]' required></textarea>
+                              </div>
+                           </div>
+                           <div class="form-group">
+                              <label for="" class="col-sm-2 control-label">选项C</label>
+                              <div class="col-sm-10">
+                                 <textarea class="form-control" name="title" ng-model='test.options[2]' required></textarea>
+                              </div>
+                           </div>
+                           <div class="form-group">
+                              <label for="" class="col-sm-2 control-label">选项D</label>
+                              <div class="col-sm-10">
+                                 <textarea class="form-control" name="title" ng-model='test.options[3]' required></textarea>
+                              </div>
+                           </div>
+                        </div>
                      </div>
                      <div class="modal-footer">
                         <button class="btn btn-default" data-dismiss='modal' type="button">关闭</button>
@@ -440,9 +476,9 @@
                   <button class="btn btn-warning btn-sm" ng-class="{'active':t.editFlag}" ng-click="t.editFlag=!t.editFlag">编辑</button>
                   <button class="btn btn-danger btn-sm" ng-click="testDel(t.id,$index)">删除</button>
                   <button class="btn btn-primary btn-sm"
-                           ng-class="{'active':t.addOptionFlag}"
-                           ng-if="(t.type==2&&t.options.length<2)||(t.type==1&&t.options.length<4)"
-                           ng-cloak ng-click="t.addOptionFlag=!t.addOptionFlag">
+                          ng-class="{'active':t.addOptionFlag}"
+                          ng-if="(t.type==2&&t.options.length<2)||(t.type==1&&t.options.length<4)"
+                          ng-cloak ng-click="t.addOptionFlag=!t.addOptionFlag">
                      添加选项
                   </button>
                </div>

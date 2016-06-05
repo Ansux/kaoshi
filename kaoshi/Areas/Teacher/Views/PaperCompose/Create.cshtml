@@ -199,6 +199,7 @@
             model.number = parseInt(number);
          }
 
+         // 删除试卷组卷
          $scope.del = function(model,composes,index){
             $http.post('/teacher/papercompose/delete', {id:model.id}).success(function(res){
                composes.splice(index,1);
@@ -211,8 +212,8 @@
             });
          }
 
+         // 保存修改的试卷组卷部分
          $scope.save = function(model){
-            console.log(model);
             var compose = {
                id: model.id,
                type: model.tid,
@@ -227,11 +228,13 @@
             });
          }
 
+         // 获取所有的题型
          $scope.paper = {};
          $http.get('/teacher/papercompose/getTypeList').success(function(res){
             $scope.types = res.types;
          });
 
+         // 获取试卷已存在的组卷
          $http.get('/teacher/papercompose/GetPaperInfo?id='+@ViewBag.paper).success(function(res){
             $scope.paper =  res;
             angular.forEach($scope.types,function(d1,i1){
@@ -269,15 +272,13 @@
             return $scope.count;
          };
 
-
-
+         // 创建新的组卷
          $scope.composeSubmit = function(){
             var compose = $scope.compose;
             compose.paper = $scope.paper.id;
             $http.post('/teacher/papercompose/create',compose).success(function(res){
                $scope.paper.composes.push(res);
                $scope.count += res.value * res.number;
-
                // 隐藏掉该题型
                angular.forEach($scope.types,function(d,i){
                   if(d.id==compose.type){
@@ -291,6 +292,7 @@
             });
          }
 
+         // 检测组卷是否完成
          $scope.confirm = function(){
             $http.post('/teacher/paper/Confirm',{id:$scope.paper.id}).success(function(res){
                if(res==true){

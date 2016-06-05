@@ -42,10 +42,12 @@ namespace kaoshi.Areas.Admin.Controllers
 
       [HttpPost]
       [ValidateAntiForgeryToken]
-      public ActionResult Create([Bind(Include = "id,login_id,login_pwd,real_name,sex,email,create_at,update_at")] es_teacher es_teacher)
+      public ActionResult Create([Bind(Include = "id,login_id,login_pwd,real_name,sex,email")] es_teacher es_teacher)
       {
          if (ModelState.IsValid)
          {
+            es_teacher.login_pwd = Tools.MD5(es_teacher.login_pwd);
+            es_teacher.create_at = DateTime.Now;
             db.es_teacher.Add(es_teacher);
             db.SaveChanges();
             return RedirectToAction("Index");

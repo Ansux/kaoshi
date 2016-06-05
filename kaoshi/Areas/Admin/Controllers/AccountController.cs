@@ -57,6 +57,7 @@ namespace kaoshi.Areas.Admin.Controllers
          return View(es_manager);
       }
 
+      #region 管理员信息修改
       public ActionResult Edit()
       {
          var mid = int.Parse(Session["Mid"].ToString());
@@ -71,7 +72,7 @@ namespace kaoshi.Areas.Admin.Controllers
 
       [HttpPost]
       [ValidateAntiForgeryToken]
-      public ActionResult Edit(int id,string login_pwd, string real_name,byte sex, string email)
+      public ActionResult Edit(int id, string login_pwd, string real_name, byte sex, string email)
       {
          var es_manager = db.es_manager.Find(id);
          try
@@ -88,11 +89,13 @@ namespace kaoshi.Areas.Admin.Controllers
             db.SaveChanges();
             return RedirectToAction("Index");
          }
-         catch { 
+         catch
+         {
             ViewBag.role = new SelectList(db.es_role, "id", "name", es_manager.role);
             return View(es_manager);
          }
-      }
+      } 
+      #endregion
 
       public ActionResult Delete(int? id)
       {
@@ -126,6 +129,8 @@ namespace kaoshi.Areas.Admin.Controllers
          }
          base.Dispose(disposing);
       }
+
+      #region 管理员登录
 
       public ActionResult Signin()
       {
@@ -167,12 +172,15 @@ namespace kaoshi.Areas.Admin.Controllers
 
          return View(manager);
       }
+      #endregion
 
+      #region 退出登录
       public ActionResult Signout()
       {
          Session.Remove("Mid");
          Session.Remove("Mname");
          return RedirectToAction("Signin");
-      }
+      } 
+      #endregion
    }
 }

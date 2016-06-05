@@ -26,20 +26,7 @@ namespace kaoshi.Areas.Student.Controllers
          return View(exams);
       }
 
-      public ActionResult Details(int? id)
-      {
-         if (id == null)
-         {
-            return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-         }
-         es_student es_student = db.es_student.Find(id);
-         if (es_student == null)
-         {
-            return HttpNotFound();
-         }
-         return View(es_student);
-      }
-
+      #region 系统公告
       public ActionResult Notices()
       {
          var notice = db.es_notice.ToList();
@@ -49,32 +36,10 @@ namespace kaoshi.Areas.Student.Controllers
       public ActionResult Notice(int? id)
       {
          return View(db.es_notice.Find(id));
-      }
+      } 
+      #endregion
 
-      [AllowAnonymous]
-      public ActionResult Create()
-      {
-         ViewBag.class_id = new SelectList(db.es_class, "no", "name");
-         return View();
-      }
-
-      [AllowAnonymous]
-      [HttpPost]
-      [ValidateAntiForgeryToken]
-      public ActionResult Create([Bind(Include = "sno,pwd,real_name,sex,email,class_id")] es_student stu)
-      {
-         if (ModelState.IsValid)
-         {
-            stu.create_at = DateTime.Now;
-            stu.pwd = Tools.MD5(stu.pwd);
-            db.es_student.Add(stu);
-            db.SaveChanges();
-            return RedirectToAction("Index");
-         }
-
-         return View(stu);
-      }
-
+      #region 学生信息更新
       public ActionResult Edit()
       {
          var id = int.Parse(Session["Sno"].ToString());
@@ -111,7 +76,8 @@ namespace kaoshi.Areas.Student.Controllers
             return View(stu);
 
          }
-      }
+      } 
+      #endregion
 
       public ActionResult Delete(int? id)
       {
@@ -137,6 +103,33 @@ namespace kaoshi.Areas.Student.Controllers
          return RedirectToAction("Index");
       }
 
+      #region 学生注册
+      [AllowAnonymous]
+      public ActionResult Create()
+      {
+         ViewBag.class_id = new SelectList(db.es_class, "no", "name");
+         return View();
+      }
+
+      [AllowAnonymous]
+      [HttpPost]
+      [ValidateAntiForgeryToken]
+      public ActionResult Create([Bind(Include = "sno,pwd,real_name,sex,email,class_id")] es_student stu)
+      {
+         if (ModelState.IsValid)
+         {
+            stu.create_at = DateTime.Now;
+            stu.pwd = Tools.MD5(stu.pwd);
+            db.es_student.Add(stu);
+            db.SaveChanges();
+            return RedirectToAction("Index");
+         }
+
+         return View(stu);
+      } 
+      #endregion
+
+      #region 学生登录
       [AllowAnonymous]
       public ActionResult Signin()
       {
@@ -176,7 +169,8 @@ namespace kaoshi.Areas.Student.Controllers
          }
 
          return View(stu);
-      }
+      } 
+      #endregion
 
       [AllowAnonymous]
       public ActionResult Signout()

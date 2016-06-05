@@ -2,6 +2,8 @@
 
 @{
    ViewBag.Title = "SelectTopic";
+   ViewBag.Controller = "试卷";
+   ViewBag.Action = "随机组卷";
 }
 
 <style type="text/css">
@@ -11,33 +13,24 @@
    }
    .test {
       padding: 8px 2px;
-      background: #337AB7;
-      color: white;
+      color: #333;
+      font-weight:bold;
    }
 
    .test-header {
       padding: 8px 2px;
-      background: #C4CBCD;
       margin-bottom: 5px;
    }
 
    .test-items {
       margin-bottom: 10px;
    }
-
-      .test-items .answer {
-         background: #f2dede;
-      }
-
    .test-options {
       padding: 8px 2px;
-      background: #F5F5F5;
-      border-bottom: solid 1px #ddd;
    }
 
       .test-options span, .test .input-group span {
          cursor: pointer;
-         color: #333;
       }
 
    .test .fleft {
@@ -68,86 +61,88 @@
    }
 </style>
 
-<h2>机选中心</h2>
-<div class="paper-info">
-   <blockquote>
-      <dl class="dl-horizontal">
-         <dt>
-            @Html.DisplayNameFor(model => model.es_subject.name)
-         </dt>
-         <dd>
-            @Html.DisplayFor(model => model.es_subject.name)
-         </dd>
-         <dt>
-            @Html.DisplayNameFor(model => model.name)
-         </dt>
-         <dd>
-            @Html.DisplayFor(model => model.name)
-         </dd>
-         <dt>
-            @Html.DisplayNameFor(model => model.ab_paging)
-         </dt>
-         <dd>
-            @Html.DisplayFor(model => model.ab_paging)
-         </dd>
-         <dt>
-            @Html.DisplayNameFor(model => model.test_time)
-         </dt>
-         <dd>
-            @Html.DisplayFor(model => model.test_time)
-         </dd>
-
-         <dt>
-            @Html.DisplayNameFor(model => model.total_points)
-         </dt>
-
-         <dd>
-            @Html.DisplayFor(model => model.total_points)
-         </dd>
-      </dl>
-   </blockquote>
+<div class="top-tools">
+   <div class="action"><span class="glyphicon glyphicon-map-marker"></span>随机组卷</div>
+   @Html.ActionLink("返回列表", "Index")
 </div>
 
-<div class="compose-box" ng-app="myApp" ng-controller="Control">
-   @* 提示框 *@
-   <div ng-if="getCount()" class="alert alert-success container">
-      <span class="glyphicon glyphicon-exclamation-sign"></span>
-      <span class="sr-only">提示:</span>试卷题目筛选完毕！
-      <a ng-click="confirm()">[提交试卷]</a>
+<div class="render-datas">
+   <div class="panel paper-info">
+      <div class="panel-heading">试卷信息</div>
+      <div class="panel-body">
+         <dl class="dl-horizontal">
+            <dt>试卷名称</dt>
+            <dd>
+               @Html.DisplayFor(model => model.name)
+            </dd>
+            <dt>科目名称</dt>
+            <dd>
+               @Html.DisplayFor(model => model.es_subject.name)
+            </dd>
+            <dt>
+               @Html.DisplayNameFor(model => model.ab_paging)
+            </dt>
+            <dd>
+               @Html.DisplayFor(model => model.ab_paging)
+            </dd>
+            <dt>
+               @Html.DisplayNameFor(model => model.test_time)
+            </dt>
+            <dd>
+               @Html.DisplayFor(model => model.test_time)
+            </dd>
+
+            <dt>
+               @Html.DisplayNameFor(model => model.total_points)
+            </dt>
+
+            <dd>
+               @Html.DisplayFor(model => model.total_points)
+            </dd>
+         </dl>
+      </div>
    </div>
-   <button type="button" class="btn btn-danger" ng-click="Choose()">机选</button>
-   <div class="row clearfix">
-      <div class="col-md-12 paper-views">
-         <div class="header"><h4>试卷预览</h4></div>
-         <div class="panel panel-success" ng-repeat="c in composes">
-            <div class="panel-heading clearfix">
-               <div class="pull-left">
-                  <span ng-bind="$index+1"></span>.
-                  <span ng-bind="c.typeName"></span>
-                  <span>({{c.tests.length}}/{{c.number}})</span>
-               </div>
-               <div class="pull-right">
-                  <span ng-bind="c.value"></span>x
-                  <span ng-bind="c.number"></span>=
-                  <span ng-bind="c.value*c.number"></span>
-               </div>
-            </div>
-            <div class="panel-body">
-               <div class="test-items" ng-repeat="t in c.tests">
-                  @* 题目信息 *@
-                  <div class="test clearfix" ng-cloak>
-                     <div class="col-sm-12 title clearfix">
-                        <span class="fleft" ng-cloak>({{$index+1}})</span>
-                        <span class="content" ng-cloak>{{t.title}} (<span ng-bind="t.result"></span>)</span>
-                     </div>
+   <div class="compose-box" ng-app="myApp" ng-controller="Control">
+      @* 提示框 *@
+      <div ng-if="getCount()" class="alert alert-success">
+         <span class="glyphicon glyphicon-exclamation-sign"></span>
+         <span class="sr-only">提示:</span>试卷题目筛选完毕！
+         <a ng-click="confirm()">[提交试卷]</a>
+      </div>
+      <button type="button" class="btn btn-danger" ng-click="Choose()">机选</button>
+      <div class="row clearfix">
+         <div class="col-md-12 paper-views">
+            <div class="header"><h4>试卷预览</h4></div>
+            <div class="panel panel-default" ng-repeat="c in composes">
+               <div class="panel-heading clearfix">
+                  <div class="pull-left">
+                     <span ng-bind="$index+1"></span>.
+                     <span ng-bind="c.typeName"></span>
+                     <span>({{c.tests.length}}/{{c.number}})</span>
                   </div>
-                  @* 题目选项 *@
-                  <div class="test-options clearfix" ng-class="{'answer':(t.result.indexOf(o.abcd)>-1)}" ng-repeat="o in t.options">
-                     <div class="col-sm-1" ng-bind="o.abcd"></div>
-                     <div class="col-sm-10" ng-cloak>
-                        <span ng-bind="o.content"></span>
+                  <div class="pull-right">
+                     <span ng-bind="c.value"></span>x
+                     <span ng-bind="c.number"></span>=
+                     <span ng-bind="c.value*c.number"></span>
+                  </div>
+               </div>
+               <div class="panel-body">
+                  <div class="test-items" ng-repeat="t in c.tests">
+                     @* 题目信息 *@
+                     <div class="test clearfix" ng-cloak>
+                        <div class="col-sm-12 title clearfix">
+                           <span class="fleft" ng-cloak>({{$index+1}})</span>
+                           <span class="content" ng-cloak>{{t.title}} (<span ng-bind="t.result"></span>)</span>
+                        </div>
                      </div>
-                     <div class="col-sm-1"><span ng-if="t.result.indexOf(o.abcd)>-1" class="glyphicon glyphicon-ok"></span></div>
+                     @* 题目选项 *@
+                     <div class="test-options clearfix" ng-class="{'answer':(t.result.indexOf(o.abcd)>-1)}" ng-repeat="o in t.options">
+                        <div class="col-sm-1" ng-bind="o.abcd"></div>
+                        <div class="col-sm-10" ng-cloak>
+                           <span ng-bind="o.content"></span>
+                        </div>
+                        <div class="col-sm-1"><span ng-if="t.result.indexOf(o.abcd)>-1" class="glyphicon glyphicon-ok"></span></div>
+                     </div>
                   </div>
                </div>
             </div>
@@ -229,8 +224,3 @@
       });
    </script>
 }
-
-<p>
-   @Html.ActionLink("Edit", "Edit", new { id = Model.id }) |
-   @Html.ActionLink("Back to List", "Index")
-</p>

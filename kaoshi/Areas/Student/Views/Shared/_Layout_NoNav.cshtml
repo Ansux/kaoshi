@@ -1,0 +1,54 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+   <meta charset="utf-8" />
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>@ViewBag.Title - 在线考试系统</title>
+   <link href="~/Content/bootstrap.min.css" rel="stylesheet" type="text/css" />
+   <link href="~/Content/stu.css" rel="stylesheet" type="text/css" />
+   <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+   <script src="~/Scripts/bootstrap.min.js"></script>
+   <script src="~/Scripts/modernizr-2.6.2.js"></script>
+   @RenderSection("Styles", false)
+</head>
+<body class="account-module">
+   <nav id="stu_module" class="navbar navbar-default navbar-fixed-top">
+      <div class="container">
+         <div class="navbar-header">
+            <button class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse">
+               <span class="sr-only">Toggle navigation</span>
+               <span class="icon-bar"></span>
+               <span class="icon-bar"></span>
+               <span class="icon-bar"></span>
+            </button>
+            <a href="/student" class="navbar-brand">
+               <span>在线</span>考试
+            </a>
+         </div>
+         <div class="collapse navbar-collapse" id="navbar-collapse">
+            <ul class="nav navbar-nav navbar-right">
+               <li>
+                  <div class="btn-group" role="group" aria-label="...">
+                     <a role="button" class="btn btn-primary" href="/student/account/signin">登录</a>
+                     <a role="button" class="btn btn-default" href="/student/account/create">注册</a>
+                  </div>
+               </li>
+            </ul>
+         </div>
+         <!-- /.navbar-collapse -->
+      </div>
+   </nav>
+
+   <section id="account_module" class="container render-body">
+      <div class="col-xs-6">@RenderBody()</div>
+      <div class="col-xs-6">
+         <img src="~/Images/loginBanner.png" alt="Alternate Text" />
+      </div>
+   </section>
+
+   <footer class="container">
+      <p>&copy; @DateTime.Now.Year - 有统计的在线考试系统——Monkey</p>
+   </footer>
+   @RenderSection("Scripts", false)
+</body>
+</html>

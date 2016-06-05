@@ -223,10 +223,11 @@ a{
 .test-options .abcd{
    padding: 0 15px 0 30px;
 }
-   .test-options span, .test .input-group span {
-      cursor: pointer;
-      color: #333;
-   }
+.test-options span,
+.test .input-group span {
+    cursor: pointer;
+    color: #333;
+}
 
 .test .fleft {
    position: absolute;

@@ -63,6 +63,7 @@ namespace kaoshi.Areas.Teacher.Controllers
          return View(es_paper);
       }
 
+      #region 修改试卷信息
       public ActionResult Edit(int? id)
       {
          if (id == null)
@@ -117,7 +118,8 @@ namespace kaoshi.Areas.Teacher.Controllers
          }
          ViewBag.subject = new SelectList(db.es_subject, "id", "name", es_paper.subject);
          return View(es_paper);
-      }
+      } 
+      #endregion
 
       public ActionResult Delete(int? id)
       {
@@ -204,6 +206,11 @@ namespace kaoshi.Areas.Teacher.Controllers
          return Json(false);
       }
 
+      /// <summary>
+      /// 通过试题字符串ID，获取试题列表
+      /// </summary>
+      /// <param name="arrStr"></param>
+      /// <returns></returns>
       public List<es_test> getTests(string arrStr)
       {
          if (!string.IsNullOrEmpty(arrStr))
@@ -218,6 +225,11 @@ namespace kaoshi.Areas.Teacher.Controllers
          return new List<es_test>();
       }
 
+      /// <summary>
+      /// 通过试题编号获取试题的选项
+      /// </summary>
+      /// <param name="test"></param>
+      /// <returns></returns>
       public List<es_test_option> getOptions(int test)
       {
          var options = db.es_test_option.Where(o => o.test == test).ToList();
@@ -244,7 +256,7 @@ namespace kaoshi.Areas.Teacher.Controllers
       }
 
       /// <summary>
-      /// 随机选题
+      /// 进入随机选题页面
       /// </summary>
       /// <param name="id"></param>
       /// <returns></returns>
@@ -263,40 +275,11 @@ namespace kaoshi.Areas.Teacher.Controllers
          return View(paper);
       }
 
-      [HttpPost]
-      public JsonResult Confirm(int id)
-      {
-         var paper = db.es_paper.Find(id);
-         db.Entry(paper).State = EntityState.Unchanged;
-         db.Entry(paper).Property(p => p.status).IsModified = true;
-         paper.status = 2;
-         db.SaveChanges();
-         return Json(true);
-      }
-
-      [HttpPost]
-      public JsonResult Complete(int id)
-      {
-         var paper = db.es_paper.Find(id);
-         db.Entry(paper).State = EntityState.Unchanged;
-         db.Entry(paper).Property(p => p.status).IsModified = true;
-         paper.status = 3;
-         db.SaveChanges();
-         return Json(true);
-      }
-
-      public JsonResult GetTypeTest(int subject, int tid)
-      {
-         var tests = db.es_test.Where(e => e.subject == subject && e.type == tid);
-         var json = (from t in tests
-                     select new
-                     {
-                        id = t.id,
-                        title = t.title
-                     }).ToArray();
-         return Json(json, JsonRequestBehavior.AllowGet);
-      }
-
+      /// <summary>
+      /// 随机选题处理程序
+      /// </summary>
+      /// <param name="id"></param>
+      /// <returns></returns>
       [HttpPost]
       public JsonResult MachineSelect(int? id)
       {
@@ -341,6 +324,55 @@ namespace kaoshi.Areas.Teacher.Controllers
          return Json(GetComposesByPaper((int)id));
       }
 
+      /// <summary>
+      /// 确认试卷的题型和题量，更改试卷的状态
+      /// </summary>
+      /// <param name="id"></param>
+      /// <returns></returns>
+      [HttpPost]
+      public JsonResult Confirm(int id)
+      {
+         var paper = db.es_paper.Find(id);
+         db.Entry(paper).State = EntityState.Unchanged;
+         db.Entry(paper).Property(p => p.status).IsModified = true;
+         paper.status = 2;
+         db.SaveChanges();
+         return Json(true);
+      }
+
+      /// <summary>
+      /// 完成组卷，更改试卷的状态
+      /// </summary>
+      /// <param name="id"></param>
+      /// <returns></returns>
+      [HttpPost]
+      public JsonResult Complete(int id)
+      {
+         var paper = db.es_paper.Find(id);
+         db.Entry(paper).State = EntityState.Unchanged;
+         db.Entry(paper).Property(p => p.status).IsModified = true;
+         paper.status = 3;
+         db.SaveChanges();
+         return Json(true);
+      }
+
+      public JsonResult GetTypeTest(int subject, int tid)
+      {
+         var tests = db.es_test.Where(e => e.subject == subject && e.type == tid);
+         var json = (from t in tests
+                     select new
+                     {
+                        id = t.id,
+                        title = t.title
+                     }).ToArray();
+         return Json(json, JsonRequestBehavior.AllowGet);
+      }
+
+      /// <summary>
+      /// 通过试卷ID，获取试卷的所有试题
+      /// </summary>
+      /// <param name="pid"></param>
+      /// <returns></returns>
       public object GetComposesByPaper(int pid)
       {
          return new

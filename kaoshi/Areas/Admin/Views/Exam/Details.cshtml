@@ -18,23 +18,13 @@
             <dt>
                @Html.DisplayNameFor(model => model.name)
             </dt>
-
             <dd>
                @Html.DisplayFor(model => model.name)
             </dd>
 
             <dt>
-               @Html.DisplayNameFor(model => model.status)
-            </dt>
-
-            <dd>
-               @Html.DisplayFor(model => model.status)
-            </dd>
-
-            <dt>
                @Html.DisplayNameFor(model => model.begin_time)
             </dt>
-
             <dd>
                @Html.DisplayFor(model => model.begin_time)
             </dd>
@@ -42,7 +32,6 @@
             <dt>
                @Html.DisplayNameFor(model => model.end_time)
             </dt>
-
             <dd>
                @Html.DisplayFor(model => model.end_time)
             </dd>
@@ -55,19 +44,19 @@
          <table class="table">
             <thead>
                <tr>
-                  <th>学生学号</th>
-                  <th>学生姓名</th>
-                  <th>查看</th>
+                  <th>学号</th>
+                  <th>姓名</th>
+                  <th>答题时间</th>
+                  <th>成绩</th>
                </tr>
             </thead>
             @foreach (var item in Model.es_stu_exam)
-         {
+            {
                <tr>
                   <td>@item.es_student.sno</td>
                   <td>@item.es_student.real_name</td>
-                  <td>
-                     @Html.ActionLink("查看", "viewDetail", new { sno = item.es_student.sno })
-                  </td>
+                  <td>@item.es_exam.begin_time ~ @item.es_exam.end_time</td>
+                  <td>@item.score</td>
                </tr>
             }
          </table>

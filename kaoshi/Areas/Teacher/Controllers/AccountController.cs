@@ -34,6 +34,7 @@ namespace kaoshi.Areas.Teacher.Controllers
          return View(es_teacher);
       }
 
+      #region 教师信息更新
       [Filters.TeacherLoginAuthorize]
       public ActionResult Edit()
       {
@@ -49,7 +50,7 @@ namespace kaoshi.Areas.Teacher.Controllers
       [Filters.TeacherLoginAuthorize]
       [HttpPost]
       [ValidateAntiForgeryToken]
-      public ActionResult Edit(int id,string login_pwd, string real_name, byte sex, string email)
+      public ActionResult Edit(int id, string login_pwd, string real_name, byte sex, string email)
       {
          int tid = int.Parse(Session["Tid"].ToString());
          var teacher = db.es_teacher.Find(tid);
@@ -69,31 +70,8 @@ namespace kaoshi.Areas.Teacher.Controllers
          {
             return View(teacher);
          }
-      }
-
-      public ActionResult Delete(int? id)
-      {
-         if (id == null)
-         {
-            return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-         }
-         es_teacher es_teacher = db.es_teacher.Find(id);
-         if (es_teacher == null)
-         {
-            return HttpNotFound();
-         }
-         return View(es_teacher);
-      }
-
-      [HttpPost, ActionName("Delete")]
-      [ValidateAntiForgeryToken]
-      public ActionResult DeleteConfirmed(int id)
-      {
-         es_teacher es_teacher = db.es_teacher.Find(id);
-         db.es_teacher.Remove(es_teacher);
-         db.SaveChanges();
-         return RedirectToAction("Index");
-      }
+      } 
+      #endregion
 
       protected override void Dispose(bool disposing)
       {
@@ -104,6 +82,7 @@ namespace kaoshi.Areas.Teacher.Controllers
          base.Dispose(disposing);
       }
 
+      #region 教师登录
       public ActionResult Signin()
       {
          var t = new es_teacher();
@@ -138,7 +117,8 @@ namespace kaoshi.Areas.Teacher.Controllers
          }
 
          return View(teacher);
-      }
+      } 
+      #endregion
 
       public ActionResult Signout()
       {

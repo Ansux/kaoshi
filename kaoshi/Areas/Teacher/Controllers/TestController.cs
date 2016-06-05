@@ -119,6 +119,54 @@ namespace kaoshi.Areas.Teacher.Controllers
             db.es_test.Add(es_test);
             db.SaveChanges();
             var test = db.es_test.Find(es_test.id);
+
+            var options = new List<es_test_option>();
+            if(test.type == 2)
+            {
+               var optionA = new es_test_option();
+               optionA.test = test.id;
+               optionA.abcd = "A";
+               optionA.content = "正确";
+
+               var optionB = new es_test_option();
+               optionB.test = test.id;
+               optionB.abcd = "B";
+               optionB.content = "错误";
+
+               db.es_test_option.Add(optionA);
+               db.es_test_option.Add(optionB);
+               db.SaveChanges();
+               options.Add(optionA);
+               options.Add(optionB);
+            }
+            else if(test.type == 1)
+            {
+               for (var i = 0; i < 4; i++)
+               {
+                  var option = new es_test_option();
+                  option.test = test.id;
+                  if (i == 0)
+                  {
+                     option.abcd = "A";
+                  }else if(i == 1)
+                  {
+                     option.abcd = "B";
+                  }
+                  else if (i == 2)
+                  {
+                     option.abcd = "C";
+                  }
+                  else if (i == 3)
+                  {
+                     option.abcd = "D";
+                  }
+                  option.content = Request.Form["options["+i+"]"];
+                  db.es_test_option.Add(option);
+                  options.Add(option);
+               }
+               db.SaveChanges();
+            }
+
             var json = new
             {
                id = es_test.id,
@@ -127,7 +175,16 @@ namespace kaoshi.Areas.Teacher.Controllers
                title = es_test.title,
                result = es_test.result,
                flag = false,
-               options = new { }
+               options = (from o in options
+                          orderby o.abcd
+                          select new
+                          {
+                             id = o.id,
+                             abcd = o.abcd,
+                             content = o.content,
+                             test = o.test,
+                             editFlag = false
+                          }).ToArray()
             };
             return Json(json);
          }

@@ -15,6 +15,10 @@ namespace kaoshi.Areas.Student.Controllers
    {
       private WebContext db = new WebContext();
 
+      /// <summary>
+      /// 学生所有的考试信息，包括即将进行的考试和完成的考试
+      /// </summary>
+      /// <returns></returns>
       public ActionResult Index()
       {
          var es_exam = db.es_exam.Where(e => e.end_time > DateTime.Now).Include(e => e.es_paper);
@@ -22,6 +26,10 @@ namespace kaoshi.Areas.Student.Controllers
          return View(es_exam.ToList());
       }
 
+      /// <summary>
+      /// 获取学生考试记录
+      /// </summary>
+      /// <returns></returns>
       public ActionResult Record()
       {
          var sno = (int)Session["Sno"];
@@ -43,6 +51,11 @@ namespace kaoshi.Areas.Student.Controllers
          return View(es_stu_exam);
       }
 
+      /// <summary>
+      /// 学生考试页面
+      /// </summary>
+      /// <param name="id"></param>
+      /// <returns></returns>
       public ActionResult Testing(int? id)
       {
          if (id == null)
@@ -80,7 +93,12 @@ namespace kaoshi.Areas.Student.Controllers
          return View(exam);
       }
 
-      #region 获取试题
+      #region 获取试卷试题
+      /// <summary>
+      /// 通过试卷ID获取整套试卷的题目列表
+      /// </summary>
+      /// <param name="pid"></param>
+      /// <returns></returns>
       public JsonResult GetPaperTests(int? pid)
       {
          var composes = db.es_paper_compose.Where(p => p.paper == pid).ToList();
@@ -118,6 +136,11 @@ namespace kaoshi.Areas.Student.Controllers
          return Json(false, JsonRequestBehavior.AllowGet);
       }
 
+      /// <summary>
+      /// 通过试题ID字符连接串，将试题ID转数组，并将试题列表返回
+      /// </summary>
+      /// <param name="arrStr"></param>
+      /// <returns></returns>
       public List<es_test> getTests(string arrStr)
       {
          if (!string.IsNullOrEmpty(arrStr))
@@ -132,6 +155,11 @@ namespace kaoshi.Areas.Student.Controllers
          return new List<es_test>();
       }
 
+      /// <summary>
+      /// 通过试题ID，获取试题的选项
+      /// </summary>
+      /// <param name="test"></param>
+      /// <returns></returns>
       public List<es_test_option> getOptions(int test)
       {
          var options = db.es_test_option.Where(o => o.test == test).ToList();
@@ -139,6 +167,11 @@ namespace kaoshi.Areas.Student.Controllers
       }
       #endregion
 
+      /// <summary>
+      /// 通过考试记录的ID，获取学生参加本场考试的所有试题答题记录
+      /// </summary>
+      /// <param name="eid"></param>
+      /// <returns></returns>
       public JsonResult GetStuTest(int eid)
       {
          var tests = db.es_stu_test.Where(t => t.exam == eid).ToList();
@@ -156,6 +189,13 @@ namespace kaoshi.Areas.Student.Controllers
          return Json(json, JsonRequestBehavior.AllowGet);
       }
 
+      /// <summary>
+      /// 保存学生答题的所选的选项
+      /// </summary>
+      /// <param name="eid"></param>
+      /// <param name="tid"></param>
+      /// <param name="option"></param>
+      /// <returns></returns>
       [HttpPost]
       public JsonResult SaveUserOption(int eid, int tid, string option)
       {
@@ -185,6 +225,11 @@ namespace kaoshi.Areas.Student.Controllers
          return Json(json);
       }
 
+      /// <summary>
+      /// 交卷。并将考试成绩记录到数据库中
+      /// </summary>
+      /// <param name="eid"></param>
+      /// <returns></returns>
       [HttpPost]
       public JsonResult Submit(int eid)
       {
@@ -214,6 +259,11 @@ namespace kaoshi.Areas.Student.Controllers
 
       }
 
+      /// <summary>
+      /// 通过考试ID，获取考试的考试结果
+      /// </summary>
+      /// <param name="eid"></param>
+      /// <returns></returns>
       public ActionResult Result(int? eid)
       {
          if (eid == null)
@@ -233,6 +283,11 @@ namespace kaoshi.Areas.Student.Controllers
          return View(exam);
       }
 
+      /// <summary>
+      /// 考试须知
+      /// </summary>
+      /// <param name="id"></param>
+      /// <returns></returns>
       public ActionResult Instructions(int? id)
       {
          ViewBag.id = id;

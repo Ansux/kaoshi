@@ -1,71 +1,5 @@
 ﻿@model kaoshi.Models.es_paper
-<style type="text/css">
-   .paper-info blockquote {
-      border: solid 1px #eee;
-      border-left: solid 3px #eee;
-   }
 
-   .test {
-      padding: 8px 2px;
-      font-size: 15px;
-      background: #FFFFFF;
-      color: #333;
-   }
-
-   .test-header {
-      padding: 8px 2px;
-      background: #C4CBCD;
-      margin-bottom: 5px;
-   }
-
-   .test-items {
-      margin-bottom: 10px;
-   }
-
-   .test-items .answer {
-      background: #F5F5F5;
-   }
-   .test-items .answer span{
-      color:rgb(70, 136, 71);
-   }
-   .test-options {
-      padding: 8px 2px;
-   }
-   .test-options .abcd{
-      padding: 0 15px 0 30px;
-   }
-      .test-options span, .test .input-group span {
-         cursor: pointer;
-         color: #333;
-      }
-
-   .test .fleft {
-      position: absolute;
-      display: block;
-      width: 25px;
-   }
-
-   .test span.content {
-      margin-left: 30px;
-      margin-right: 60px;
-      display: block;
-   }
-
-   .test span.fright {
-      position: absolute;
-      top: 0;
-      right: 10px;
-      display: block;
-   }
-
-   .test-container .control {
-      margin-bottom: 20px;
-   }
-
-   .panel-body {
-      padding: 5px;
-   }
-</style>
 @{
    ViewBag.Title = "Details";
    ViewBag.Controller = "试卷";
@@ -75,7 +9,7 @@
 <div class="top-tools">
    <div class="action"><span class="glyphicon glyphicon-map-marker"></span>试卷详情</div>
    @Html.ActionLink("返回列表", "Index")
-   @Html.ActionLink("编辑试卷", "Index")
+   @Html.ActionLink("编辑试卷", "Edit",new { id = Model.id})
 </div>
 
 <div class="render-datas">

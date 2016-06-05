@@ -133,11 +133,6 @@
     <Content Include="Areas\Teacher\Views\Paper\Details.cshtml" />
     <Content Include="Areas\Teacher\Views\Paper\Edit.cshtml" />
     <Content Include="Areas\Teacher\Views\Paper\Index.cshtml" />
-    <Content Include="Areas\Teacher\Views\TestOption\Create.cshtml" />
-    <Content Include="Areas\Teacher\Views\TestOption\Delete.cshtml" />
-    <Content Include="Areas\Teacher\Views\TestOption\Details.cshtml" />
-    <Content Include="Areas\Teacher\Views\TestOption\Edit.cshtml" />
-    <Content Include="Areas\Teacher\Views\TestOption\Index.cshtml" />
     <Content Include="Areas\Teacher\Views\Test\Create.cshtml" />
     <Content Include="Areas\Teacher\Views\Test\Delete.cshtml" />
     <Content Include="Areas\Teacher\Views\Test\Details.cshtml" />
@@ -216,11 +211,13 @@
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
     <Content Include="Areas\Teacher\Views\Account\Signin - 复制.cshtml" />
     <Content Include="Areas\Teacher\Views\Shared\_Layout - 复制.cshtml" />
+    <Content Include="Areas\Student\Views\Shared\_Layout_NoNav.cshtml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Images\clock.jpg" />
     <Content Include="Images\examPoint.png" />
     <Content Include="Images\icon1.png" />
     <Content Include="Images\icon4.png" />
+    <Content Include="Images\loginBanner.png" />
     <Content Include="Scripts\angular.min.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
@@ -255,7 +252,6 @@
     <Compile Include="Areas\Teacher\Controllers\PaperComposeController.cs" />
     <Compile Include="Areas\Teacher\Controllers\PaperController.cs" />
     <Compile Include="Areas\Teacher\Controllers\TestController.cs" />
-    <Compile Include="Areas\Teacher\Controllers\TestOptionController.cs" />
     <Compile Include="Areas\Teacher\Models\TestModel.cs" />
     <Compile Include="Areas\Teacher\TeacherAreaRegistration.cs" />
     <Compile Include="Controllers\AdminController.cs" />

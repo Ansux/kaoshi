@@ -2,72 +2,66 @@
 
 @{
    ViewBag.Title = "Create";
+   Layout = "~/Areas/Student/Views/Shared/_Layout_NoNav.cshtml";
 }
 
-<div class="panel panel-default">
+<div class="panel signup-form">
    <div class="panel-heading">学生注册</div>
-   <div class="panel-body" style="padding: 50px 50px 20px 15px;">
+   <div class="panel-body">
       @using (Html.BeginForm())
       {
          @Html.AntiForgeryToken()
          <div class="form-horizontal">
             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
             <div class="form-group">
-               @Html.LabelFor(model => model.sno, htmlAttributes: new { @class = "control-label col-xs-2" })
-               <div class="col-xs-10">
-                  @Html.EditorFor(model => model.sno, new { htmlAttributes = new { @class = "form-control" } })
-                  @Html.ValidationMessageFor(model => model.sno, "", new { @class = "text-danger" })
-               </div>
+               @Html.LabelFor(model => model.sno)
+               @Html.EditorFor(model => model.sno, new { htmlAttributes = new { @class = "form-control" } })
+               @Html.ValidationMessageFor(model => model.sno, "", new { @class = "text-danger" })
             </div>
             <div class="form-group">
-               @Html.LabelFor(model => model.pwd, htmlAttributes: new { @class = "control-label col-xs-2" })
-               <div class="col-xs-10">
-                  @Html.EditorFor(model => model.pwd, new { htmlAttributes = new { @class = "form-control" } })
-                  @Html.ValidationMessageFor(model => model.pwd, "", new { @class = "text-danger" })
-               </div>
+               @Html.LabelFor(model => model.pwd)
+               @Html.EditorFor(model => model.pwd, new { htmlAttributes = new { @class = "form-control" } })
+               @Html.ValidationMessageFor(model => model.pwd, "", new { @class = "text-danger" })
             </div>
             <div class="form-group">
-               @Html.LabelFor(model => model.real_name, htmlAttributes: new { @class = "control-label col-xs-2" })
-               <div class="col-xs-10">
-                  @Html.EditorFor(model => model.real_name, new { htmlAttributes = new { @class = "form-control" } })
-                  @Html.ValidationMessageFor(model => model.real_name, "", new { @class = "text-danger" })
-               </div>
+               @Html.LabelFor(model => model.real_name)
+               @Html.EditorFor(model => model.real_name, new { htmlAttributes = new { @class = "form-control" } })
+               @Html.ValidationMessageFor(model => model.real_name, "", new { @class = "text-danger" })
             </div>
-            <div class="form-group">
-               @Html.LabelFor(model => model.sex, htmlAttributes: new { @class = "control-label col-xs-2" })
-               <div class="col-xs-10">
+            <div class="form-group sex-form">
+               @Html.LabelFor(model => model.sex)
+               <div class="sex-radio">
                   <label class="radio-inline">
                      <input type="radio" name="sex" id="inlineRadio1" value="1"> 男
                   </label>
                   <label class="radio-inline">
                      <input type="radio" name="sex" id="inlineRadio2" value="0"> 女
                   </label>
-                  @Html.ValidationMessageFor(model => model.sex, "", new { @class = "text-danger" })
                </div>
+               @Html.ValidationMessageFor(model => model.sex, "", new { @class = "text-danger" })
             </div>
             <div class="form-group">
-               @Html.LabelFor(model => model.email, htmlAttributes: new { @class = "control-label col-xs-2" })
-               <div class="col-xs-10">
-                  @Html.EditorFor(model => model.email, new { htmlAttributes = new { @class = "form-control" } })
-                  @Html.ValidationMessageFor(model => model.email, "", new { @class = "text-danger" })
-               </div>
+               @Html.LabelFor(model => model.email)
+               @Html.EditorFor(model => model.email, new { htmlAttributes = new { @class = "form-control" } })
+               @Html.ValidationMessageFor(model => model.email, "", new { @class = "text-danger" })
             </div>
             <div class="form-group">
-               @Html.LabelFor(model => model.class_id, "班级", htmlAttributes: new { @class = "control-label col-xs-2" })
-               <div class="col-xs-10">
-                  @Html.DropDownList("class_id", null, htmlAttributes: new { @class = "form-control" })
-                  @Html.ValidationMessageFor(model => model.class_id, "", new { @class = "text-danger" })
-               </div>
+               @Html.LabelFor(model => model.class_id, "班级")
+               @Html.DropDownList("class_id", null, htmlAttributes: new { @class = "form-control" })
+               @Html.ValidationMessageFor(model => model.class_id, "", new { @class = "text-danger" })
             </div>
             <div class="form-group">
-               <div class="col-xs-offset-2 col-xs-10">
-                  <input type="submit" value="提交注册" class="btn btn-default" />
+                  <button type="submit" class="btn btn-primary">提交注册</button>
                   <div style="float:right; line-height:35px;">
                      已有账号，@Html.ActionLink("去登录", "signin")
                   </div>
-               </div>
             </div>
          </div>
-      }
+   }
    </div>
 </div>
+
+@section Scripts{
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+}

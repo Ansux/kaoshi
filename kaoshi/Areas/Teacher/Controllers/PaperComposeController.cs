@@ -167,6 +167,12 @@ namespace kaoshi.Areas.Teacher.Controllers
          base.Dispose(disposing);
       }
 
+      /// <summary>
+      /// 将试题添加到试卷的组卷中。
+      /// </summary>
+      /// <param name="composeId"></param>
+      /// <param name="testId"></param>
+      /// <returns></returns>
       [HttpPost]
       public JsonResult AddTest(int composeId, int testId)
       {
@@ -185,6 +191,12 @@ namespace kaoshi.Areas.Teacher.Controllers
          return Json(true);
       }
 
+      /// <summary>
+      /// 将试题从组卷中移除
+      /// </summary>
+      /// <param name="composeId"></param>
+      /// <param name="testId"></param>
+      /// <returns></returns>
       [HttpPost]
       public JsonResult RemoveTest(int composeId, int testId)
       {
@@ -207,32 +219,6 @@ namespace kaoshi.Areas.Teacher.Controllers
          db.SaveChanges();
 
          return Json(true);
-      }
-
-      public ActionResult Test()
-      {
-         int a = 6;
-         string aaa = "4,5,6";
-         var arr = aaa.Split(',').ToList();
-         for (var i = 0; i < arr.Count; i++)
-         {
-            if (arr[i] == a.ToString())
-            {
-               arr.RemoveAt(i);
-            }
-         }
-
-         string sss = string.Join(",", arr.ToArray());
-
-         //foreach(var i in arr)
-         //{
-         //   if (i == a.ToString())
-         //   {
-         //      arr.RemoveAt(1);
-         //   }
-         //}
-
-         return Json(sss, JsonRequestBehavior.AllowGet);
       }
 
       /// <summary>

@@ -159,11 +159,12 @@
             $('html,body').animate({scrollTop:$('#test'+tid).offset().top + 80},1000);
          };
 
-         
+         // 试题跳转，当学生选答案后，自动移至下一题答题。
          $scope.goTo = function(id){
             $('html,body').animate({scrollTop:$('#test'+id).offset().top - 80},1000);
          };
 
+         // 交卷，检查未选的答题数量
          $scope.submit = function(){
             var tempArr = [];
             angular.forEach($scope.composes,function(compose,key){
